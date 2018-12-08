@@ -16,26 +16,26 @@ namespace ComputerGraphics
 	{
 		private const int NumOfCells = 100;
 		private const int CellSize = 20;
+		private const int CellSpace = 40;
+
+		private Bitmap image;
+		private Pen pen;
 
 		public Form1()
 		{
 			InitializeComponent();
 
-			Bitmap image = new Bitmap(pictureBoxGrid.Width, pictureBoxGrid.Height, PixelFormat.Format32bppRgb);
-			Pen pen = new Pen(Color.Gray, 1);
+			image = new Bitmap(pictureBoxGrid.Width, pictureBoxGrid.Height, PixelFormat.Format32bppRgb);
+			pen = new Pen(Color.Gray, 1);
 
-			DrawGrid(image, pen);
-
-			pen.Color = Color.Black;
-			pen.Width = 3;
-
-			DrawCoordinateSystem(image, pen);
+			DrawGrid();
+			DrawCoordinateSystem();
 			DrawLabels(image);
-			
+
 			pictureBoxGrid.Invalidate();
 		}
 
-		private void DrawGrid(Bitmap image, Pen pen)
+		private void DrawGrid()
 		{
 			Graphics.FromImage(image).Clear(Color.White);
 			pictureBoxGrid.BackgroundImage = image;
@@ -50,8 +50,11 @@ namespace ComputerGraphics
 			}
 		}
 
-		private void DrawCoordinateSystem(Bitmap image, Pen pen)
+		private void DrawCoordinateSystem()
 		{
+			pen.Color = Color.Black;
+			pen.Width = 3;
+
 			// Vertical
 			Graphics.FromImage(image).DrawLine(pen, pictureBoxGrid.Width / 2, 0, pictureBoxGrid.Width / 2, pictureBoxGrid.Height);
 
@@ -86,8 +89,69 @@ namespace ComputerGraphics
 				Graphics.FromImage(image).DrawString($"{-i}", new Font(Font, FontStyle.Italic), Brushes.Black, pictureBoxGrid.Width / 2 + 10, number);
 				number += 40;
 			}
+		}
 
-			//Graphics.FromImage(image).DrawRectangle(pen, new Rectangle(760, 240, 50, 50));
+		private void DrawSquare()
+		{
+			int firstY = Convert.ToInt32(nupFirstY.Value);
+			int firstX = Convert.ToInt32(nupFirstX.Value);
+
+			int secondY = Convert.ToInt32(nupSecondY.Value);
+			int secondX = Convert.ToInt32(nupSecondX.Value);
+
+			if (firstY >= 0)
+			{
+				firstY = pictureBoxGrid.Height / 2 - firstY * CellSpace;
+			}
+			else
+			{
+				firstY = Math.Abs(firstY);
+				firstY = pictureBoxGrid.Height / 2 + firstY * CellSpace;
+			}
+
+			if (firstX >= 0)
+			{
+				firstX = pictureBoxGrid.Width / 2 + firstX * CellSpace;
+			}
+			else
+			{
+				firstX = Math.Abs(firstX);
+				firstX = pictureBoxGrid.Width / 2 - firstX * CellSpace;
+			}
+
+			if (secondY >= 0)
+			{
+				secondY = pictureBoxGrid.Height / 2 - secondY * CellSpace;
+			}
+			else
+			{
+				secondY = Math.Abs(secondY);
+				secondY = pictureBoxGrid.Height / 2 + secondY * CellSpace;
+			}
+
+			if (secondX >= 0)
+			{
+				secondX = pictureBoxGrid.Width / 2 + secondX * CellSpace;
+			}
+			else
+			{
+				secondX = Math.Abs(secondX);
+				secondX = pictureBoxGrid.Width / 2 - secondX * CellSpace;
+			}
+
+			if (secondX - firstX == secondY - firstY)
+			{
+				pen.Color = Color.Red;
+				Graphics.FromImage(image).DrawRectangle(pen, new Rectangle(firstX, firstY, secondX - firstX, secondY - firstY));
+				pictureBoxGrid.Invalidate();
+			}
+		}
+
+		private void btnAddSquare_Click(object sender, EventArgs e)
+		{
+
+
+			DrawSquare();
 		}
 	}
 }
