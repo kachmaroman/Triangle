@@ -40,6 +40,10 @@
 			this.nupSecondX = new System.Windows.Forms.NumericUpDown();
 			this.nupSecondY = new System.Windows.Forms.NumericUpDown();
 			this.btnAddSquare = new System.Windows.Forms.Button();
+			this.cdSquareColor = new System.Windows.Forms.ColorDialog();
+			this.btnSquareColor = new System.Windows.Forms.Button();
+			this.btnCircleColor = new System.Windows.Forms.Button();
+			this.cdCircleColor = new System.Windows.Forms.ColorDialog();
 			((System.ComponentModel.ISupportInitialize)(this.pictureBoxGrid)).BeginInit();
 			((System.ComponentModel.ISupportInitialize)(this.nupFirstY)).BeginInit();
 			((System.ComponentModel.ISupportInitialize)(this.nupFirstX)).BeginInit();
@@ -187,19 +191,44 @@
 			// 
 			// btnAddSquare
 			// 
-			this.btnAddSquare.Location = new System.Drawing.Point(821, 216);
+			this.btnAddSquare.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.btnAddSquare.Location = new System.Drawing.Point(818, 359);
 			this.btnAddSquare.Name = "btnAddSquare";
-			this.btnAddSquare.Size = new System.Drawing.Size(124, 34);
+			this.btnAddSquare.Size = new System.Drawing.Size(141, 50);
 			this.btnAddSquare.TabIndex = 16;
 			this.btnAddSquare.Text = "Побудувати квадрат";
 			this.btnAddSquare.UseVisualStyleBackColor = true;
 			this.btnAddSquare.Click += new System.EventHandler(this.btnAddSquare_Click);
+			// 
+			// btnSquareColor
+			// 
+			this.btnSquareColor.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.btnSquareColor.Location = new System.Drawing.Point(818, 216);
+			this.btnSquareColor.Name = "btnSquareColor";
+			this.btnSquareColor.Size = new System.Drawing.Size(141, 54);
+			this.btnSquareColor.TabIndex = 18;
+			this.btnSquareColor.Text = "Колір межі квадрату";
+			this.btnSquareColor.UseVisualStyleBackColor = true;
+			this.btnSquareColor.Click += new System.EventHandler(this.btnSquareColor_Click);
+			// 
+			// btnCircleColor
+			// 
+			this.btnCircleColor.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.btnCircleColor.Location = new System.Drawing.Point(818, 276);
+			this.btnCircleColor.Name = "btnCircleColor";
+			this.btnCircleColor.Size = new System.Drawing.Size(141, 54);
+			this.btnCircleColor.TabIndex = 19;
+			this.btnCircleColor.Text = "Колір заливки кола";
+			this.btnCircleColor.UseVisualStyleBackColor = true;
+			this.btnCircleColor.Click += new System.EventHandler(this.btnCircleColor_Click);
 			// 
 			// Form1
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.ClientSize = new System.Drawing.Size(971, 825);
+			this.Controls.Add(this.btnCircleColor);
+			this.Controls.Add(this.btnSquareColor);
 			this.Controls.Add(this.btnAddSquare);
 			this.Controls.Add(this.nupSecondX);
 			this.Controls.Add(this.nupSecondY);
@@ -237,6 +266,10 @@
 		private System.Windows.Forms.NumericUpDown nupSecondX;
 		private System.Windows.Forms.NumericUpDown nupSecondY;
 		private System.Windows.Forms.Button btnAddSquare;
+		private System.Windows.Forms.ColorDialog cdSquareColor;
+		private System.Windows.Forms.Button btnSquareColor;
+		private System.Windows.Forms.Button btnCircleColor;
+		private System.Windows.Forms.ColorDialog cdCircleColor;
 	}
 }
 

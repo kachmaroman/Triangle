@@ -28,6 +28,9 @@ namespace ComputerGraphics
 			image = new Bitmap(pictureBoxGrid.Width, pictureBoxGrid.Height, PixelFormat.Format32bppRgb);
 			pen = new Pen(Color.Gray, 1);
 
+			Graphics.FromImage(image).Clear(Color.White);
+			pictureBoxGrid.BackgroundImage = image;
+
 			DrawGrid();
 			DrawCoordinateSystem();
 			DrawLabels(image);
@@ -37,8 +40,8 @@ namespace ComputerGraphics
 
 		private void DrawGrid()
 		{
-			Graphics.FromImage(image).Clear(Color.White);
-			pictureBoxGrid.BackgroundImage = image;
+			pen.Color = Color.Black;
+			pen.Width = 1;
 
 			for (int i = 0; i < pictureBoxGrid.Height; i++)
 			{
@@ -91,7 +94,22 @@ namespace ComputerGraphics
 			}
 		}
 
-		private void DrawSquare()
+		private void DrawGridInsideSquare(int firstX, int secondX, int firstY, int secondY)
+		{
+			pen = new Pen(Color.Black, 1);
+
+			for (int i = firstX + CellSize; i < secondX; i += CellSize)
+			{
+				Graphics.FromImage(image).DrawLine(pen, i, firstY, i, secondY);
+			}
+
+			for (int i = firstY + CellSize; i < secondY; i += CellSize)
+			{
+				Graphics.FromImage(image).DrawLine(pen, firstX, i, secondX, i);
+			}
+		}
+
+		private void DrawCircumcircleBySquare()
 		{
 			int firstY = Convert.ToInt32(nupFirstY.Value);
 			int firstX = Convert.ToInt32(nupFirstX.Value);
@@ -139,22 +157,46 @@ namespace ComputerGraphics
 				secondX = pictureBoxGrid.Width / 2 - secondX * CellSpace;
 			}
 
-			int radius = (secondX - firstX) * 4 / 20;
+			int diameter = (secondX - firstX) * 4 / 20;
 
 			if (secondX - firstX == secondY - firstY)
 			{
-				Graphics.FromImage(image).DrawLine(pen, firstX, firstY, secondX, secondY);
+				pen = new Pen(cdCircleColor.Color, 1);
+				Graphics.FromImage(image).DrawEllipse(pen, new Rectangle(firstX - diameter, firstY - diameter, secondX - firstX + diameter * 2, secondY - firstY + diameter * 2));
+				Brush brush = new SolidBrush(cdCircleColor.Color);
+				Graphics.FromImage(image).FillEllipse(brush, new Rectangle(firstX - diameter, firstY - diameter, secondX - firstX + diameter * 2, secondY - firstY + diameter * 2));
+
+				
+				brush = new SolidBrush(Color.White);
+				Graphics.FromImage(image).FillRectangle(brush, new Rectangle(firstX, firstY, secondX - firstX, secondY - firstY));
+				pen = new Pen(cdSquareColor.Color, 1);
 				Graphics.FromImage(image).DrawRectangle(pen, new Rectangle(firstX, firstY, secondX - firstX, secondY - firstY));
-				Graphics.FromImage(image).DrawEllipse(pen, new Rectangle(firstX - radius, firstY - radius, secondX - firstX + radius * 2, secondY - firstY + radius * 2));
+
+				DrawGridInsideSquare(firstX, secondX, firstY, secondY);
+
 				pictureBoxGrid.Invalidate();
 			}
 		}
 
 		private void btnAddSquare_Click(object sender, EventArgs e)
 		{
+			DrawCircumcircleBySquare();
+		}
 
+		private void btnSquareColor_Click(object sender, EventArgs e)
+		{
+			if (cdSquareColor.ShowDialog() == DialogResult.OK)
+			{
+				btnSquareColor.ForeColor = cdSquareColor.Color;
+			}
+		}
 
-			DrawSquare();
+		private void btnCircleColor_Click(object sender, EventArgs e)
+		{
+			if (cdCircleColor.ShowDialog() == DialogResult.OK)
+			{
+				btnCircleColor.ForeColor = cdCircleColor.Color;
+			}
 		}
 	}
 }
