@@ -25,6 +25,11 @@ namespace ComputerGraphics
 		{
 			InitializeComponent();
 
+			Initialize();
+		}
+
+		private void Initialize()
+		{
 			image = new Bitmap(pictureBoxGrid.Width, pictureBoxGrid.Height, PixelFormat.Format32bppRgb);
 			pen = new Pen(Color.Gray, 1);
 
@@ -33,7 +38,7 @@ namespace ComputerGraphics
 
 			DrawGrid();
 			DrawCoordinateSystem();
-			DrawLabels(image);
+			DrawLabels();
 
 			pictureBoxGrid.Invalidate();
 		}
@@ -72,7 +77,7 @@ namespace ComputerGraphics
 			Graphics.FromImage(image).DrawLine(pen, pictureBoxGrid.Width, pictureBoxGrid.Height / 2, pictureBoxGrid.Width - 10, pictureBoxGrid.Height / 2 + 10);
 		}
 
-		private void DrawLabels(Bitmap image)
+		private void DrawLabels()
 		{
 			int maxNum = 10;
 			int number = pictureBoxGrid.Height / 2 - 45;
@@ -157,7 +162,9 @@ namespace ComputerGraphics
 				secondX = pictureBoxGrid.Width / 2 - secondX * CellSpace;
 			}
 
-			int diameter = (secondX - firstX) * 4 / 20;
+			int diameter = (secondX - firstX) * 4 / CellSize;
+
+			diameter += diameter > 140 ? 6 : diameter > 100 ? 4 : diameter > 40 ? 2 : 0;
 
 			if (secondX - firstX == secondY - firstY)
 			{
@@ -173,6 +180,8 @@ namespace ComputerGraphics
 				Graphics.FromImage(image).DrawRectangle(pen, new Rectangle(firstX, firstY, secondX - firstX, secondY - firstY));
 
 				DrawGridInsideSquare(firstX, secondX, firstY, secondY);
+				DrawCoordinateSystem();
+				DrawLabels();
 
 				pictureBoxGrid.Invalidate();
 			}
@@ -197,6 +206,11 @@ namespace ComputerGraphics
 			{
 				btnCircleColor.ForeColor = cdCircleColor.Color;
 			}
+		}
+
+		private void btnClear_Click(object sender, EventArgs e)
+		{
+			Initialize();
 		}
 	}
 }

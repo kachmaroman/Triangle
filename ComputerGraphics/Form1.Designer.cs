@@ -44,6 +44,7 @@
 			this.btnSquareColor = new System.Windows.Forms.Button();
 			this.btnCircleColor = new System.Windows.Forms.Button();
 			this.cdCircleColor = new System.Windows.Forms.ColorDialog();
+			this.btnClear = new System.Windows.Forms.Button();
 			((System.ComponentModel.ISupportInitialize)(this.pictureBoxGrid)).BeginInit();
 			((System.ComponentModel.ISupportInitialize)(this.nupFirstY)).BeginInit();
 			((System.ComponentModel.ISupportInitialize)(this.nupFirstX)).BeginInit();
@@ -64,9 +65,9 @@
 			this.label1.AutoSize = true;
 			this.label1.Location = new System.Drawing.Point(818, 12);
 			this.label1.Name = "label1";
-			this.label1.Size = new System.Drawing.Size(90, 13);
+			this.label1.Size = new System.Drawing.Size(119, 13);
 			this.label1.TabIndex = 2;
-			this.label1.Text = "Верхня вершина";
+			this.label1.Text = "Верхня вершина (ліва)";
 			// 
 			// label2
 			// 
@@ -222,11 +223,22 @@
 			this.btnCircleColor.UseVisualStyleBackColor = true;
 			this.btnCircleColor.Click += new System.EventHandler(this.btnCircleColor_Click);
 			// 
+			// btnClear
+			// 
+			this.btnClear.Location = new System.Drawing.Point(818, 789);
+			this.btnClear.Name = "btnClear";
+			this.btnClear.Size = new System.Drawing.Size(141, 23);
+			this.btnClear.TabIndex = 21;
+			this.btnClear.Text = "Очистити";
+			this.btnClear.UseVisualStyleBackColor = true;
+			this.btnClear.Click += new System.EventHandler(this.btnClear_Click);
+			// 
 			// Form1
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.ClientSize = new System.Drawing.Size(971, 826);
+			this.Controls.Add(this.btnClear);
 			this.Controls.Add(this.btnCircleColor);
 			this.Controls.Add(this.btnSquareColor);
 			this.Controls.Add(this.btnAddSquare);
@@ -272,6 +284,7 @@
 		private System.Windows.Forms.Button btnSquareColor;
 		private System.Windows.Forms.Button btnCircleColor;
 		private System.Windows.Forms.ColorDialog cdCircleColor;
+		private System.Windows.Forms.Button btnClear;
 	}
 }
 
