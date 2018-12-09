@@ -139,10 +139,13 @@ namespace ComputerGraphics
 				secondX = pictureBoxGrid.Width / 2 - secondX * CellSpace;
 			}
 
+			int radius = (secondX - firstX) * 4 / 20;
+
 			if (secondX - firstX == secondY - firstY)
 			{
-				pen.Color = Color.Red;
+				Graphics.FromImage(image).DrawLine(pen, firstX, firstY, secondX, secondY);
 				Graphics.FromImage(image).DrawRectangle(pen, new Rectangle(firstX, firstY, secondX - firstX, secondY - firstY));
+				Graphics.FromImage(image).DrawEllipse(pen, new Rectangle(firstX - radius, firstY - radius, secondX - firstX + radius * 2, secondY - firstY + radius * 2));
 				pictureBoxGrid.Invalidate();
 			}
 		}
