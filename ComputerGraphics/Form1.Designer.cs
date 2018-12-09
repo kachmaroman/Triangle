@@ -226,7 +226,7 @@
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-			this.ClientSize = new System.Drawing.Size(971, 825);
+			this.ClientSize = new System.Drawing.Size(971, 826);
 			this.Controls.Add(this.btnCircleColor);
 			this.Controls.Add(this.btnSquareColor);
 			this.Controls.Add(this.btnAddSquare);
@@ -241,8 +241,10 @@
 			this.Controls.Add(this.label2);
 			this.Controls.Add(this.label1);
 			this.Controls.Add(this.pictureBoxGrid);
+			this.MaximumSize = new System.Drawing.Size(987, 865);
+			this.MinimumSize = new System.Drawing.Size(987, 865);
 			this.Name = "Form1";
-			this.Text = "Form1";
+			this.Text = "Побудова двомірних зображень";
 			((System.ComponentModel.ISupportInitialize)(this.pictureBoxGrid)).EndInit();
 			((System.ComponentModel.ISupportInitialize)(this.nupFirstY)).EndInit();
 			((System.ComponentModel.ISupportInitialize)(this.nupFirstX)).EndInit();
