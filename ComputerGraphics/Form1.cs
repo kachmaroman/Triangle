@@ -16,7 +16,16 @@ namespace ComputerGraphics
 	{
 		private const int NumOfCells = 100;
 		private const int CellSize = 20;
-		private const int CellSpace = 40;
+		private const int Offset = 5;
+		private const int NumberOfAngles = 4;
+		private const int UpUpSpaceFromCoordinateLine = 25;
+		private const int BottomSpaceFromCoordinateLine = 10;
+
+		private int CellSpace;
+		private int MaxValueOfCoordinate;
+
+		private int MaxValueOfNumericUpDown;
+		private int MinValueOfNumbericUpDown;
 
 		private Bitmap image;
 		private Pen pen;
@@ -30,6 +39,22 @@ namespace ComputerGraphics
 
 		private void Initialize()
 		{
+			CellSpace = trackBar.Value * CellSize;
+			MaxValueOfCoordinate = Convert.ToInt32(Math.Ceiling(pictureBoxGrid.Height / 2.0 / CellSpace));
+
+			MaxValueOfNumericUpDown = MaxValueOfCoordinate - 1;
+			MinValueOfNumbericUpDown = MaxValueOfNumericUpDown * -1;
+
+			nupFirstX.Minimum = MinValueOfNumbericUpDown;
+			nupFirstX.Maximum = MaxValueOfNumericUpDown;
+			nupFirstY.Minimum = MinValueOfNumbericUpDown;
+			nupFirstY.Maximum = MaxValueOfNumericUpDown;
+
+			nupSecondX.Minimum = MinValueOfNumbericUpDown;
+			nupSecondX.Maximum = MaxValueOfNumericUpDown;
+			nupSecondY.Minimum = MinValueOfNumbericUpDown;
+			nupSecondY.Maximum = MaxValueOfNumericUpDown;
+
 			image = new Bitmap(pictureBoxGrid.Width, pictureBoxGrid.Height, PixelFormat.Format32bppRgb);
 			pen = new Pen(Color.Gray, 1);
 
@@ -70,32 +95,32 @@ namespace ComputerGraphics
 			Graphics.FromImage(image).DrawLine(pen, 0, pictureBoxGrid.Height / 2, pictureBoxGrid.Width, pictureBoxGrid.Height / 2);
 
 			// Arrows
-			Graphics.FromImage(image).DrawLine(pen, pictureBoxGrid.Width / 2, 0, pictureBoxGrid.Width / 2 - 10, 10);
-			Graphics.FromImage(image).DrawLine(pen, pictureBoxGrid.Width / 2, 0, pictureBoxGrid.Width / 2 + 10, 10);
+			Graphics.FromImage(image).DrawLine(pen, pictureBoxGrid.Width / 2, 0, pictureBoxGrid.Width / 2 - BottomSpaceFromCoordinateLine, BottomSpaceFromCoordinateLine);
+			Graphics.FromImage(image).DrawLine(pen, pictureBoxGrid.Width / 2, 0, pictureBoxGrid.Width / 2 + BottomSpaceFromCoordinateLine, BottomSpaceFromCoordinateLine);
 
-			Graphics.FromImage(image).DrawLine(pen, pictureBoxGrid.Width, pictureBoxGrid.Height / 2, pictureBoxGrid.Width - 10, pictureBoxGrid.Height / 2 - 10);
-			Graphics.FromImage(image).DrawLine(pen, pictureBoxGrid.Width, pictureBoxGrid.Height / 2, pictureBoxGrid.Width - 10, pictureBoxGrid.Height / 2 + 10);
+			Graphics.FromImage(image).DrawLine(pen, pictureBoxGrid.Width, pictureBoxGrid.Height / 2, pictureBoxGrid.Width - BottomSpaceFromCoordinateLine, pictureBoxGrid.Height / 2 - BottomSpaceFromCoordinateLine);
+			Graphics.FromImage(image).DrawLine(pen, pictureBoxGrid.Width, pictureBoxGrid.Height / 2, pictureBoxGrid.Width - BottomSpaceFromCoordinateLine, pictureBoxGrid.Height / 2 + BottomSpaceFromCoordinateLine);
 		}
 
 		private void DrawLabels()
 		{
-			int maxNum = 10;
-			int number = pictureBoxGrid.Height / 2 - 45;
+			MaxValueOfCoordinate = Convert.ToInt32(Math.Ceiling(pictureBoxGrid.Height / 2.0 / CellSpace));
+			int number = pictureBoxGrid.Height / 2 - CellSpace - Offset;
 
-			for (int i = 1; i < maxNum; i++)
+			for (int i = 1; i < MaxValueOfCoordinate; i++)
 			{
-				Graphics.FromImage(image).DrawString($"{i}", new Font(Font, FontStyle.Italic), Brushes.Black, pictureBoxGrid.Width / 2 - 25, number);
-				Graphics.FromImage(image).DrawString($"{-i}", new Font(Font, FontStyle.Italic), Brushes.Black, number, pictureBoxGrid.Height / 2 + 10);
-				number -= 40;
+				Graphics.FromImage(image).DrawString($"{i}", new Font(Font, FontStyle.Italic), Brushes.Black, pictureBoxGrid.Width / 2 - UpUpSpaceFromCoordinateLine, number);
+				Graphics.FromImage(image).DrawString($"{-i}", new Font(Font, FontStyle.Italic), Brushes.Black, number, pictureBoxGrid.Height / 2 + BottomSpaceFromCoordinateLine);
+				number -= CellSpace;
 			}
 
-			number = pictureBoxGrid.Width / 2 + 30;
+			number = pictureBoxGrid.Width / 2 + (CellSpace - Offset);
 
-			for (int i = 1; i < maxNum; i++)
+			for (int i = 1; i < MaxValueOfCoordinate; i++)
 			{
-				Graphics.FromImage(image).DrawString($"{i}", new Font(Font, FontStyle.Italic), Brushes.Black, number, pictureBoxGrid.Height / 2 + 10);
-				Graphics.FromImage(image).DrawString($"{-i}", new Font(Font, FontStyle.Italic), Brushes.Black, pictureBoxGrid.Width / 2 + 10, number);
-				number += 40;
+				Graphics.FromImage(image).DrawString($"{i}", new Font(Font, FontStyle.Italic), Brushes.Black, number, pictureBoxGrid.Height / 2 + BottomSpaceFromCoordinateLine);
+				Graphics.FromImage(image).DrawString($"{-i}", new Font(Font, FontStyle.Italic), Brushes.Black, pictureBoxGrid.Width / 2 + BottomSpaceFromCoordinateLine, number);
+				number += CellSpace;
 			}
 		}
 
@@ -116,11 +141,12 @@ namespace ComputerGraphics
 
 		private void DrawCircumcircleBySquare()
 		{
-			int firstY = Convert.ToInt32(nupFirstY.Value);
 			int firstX = Convert.ToInt32(nupFirstX.Value);
+			int firstY = Convert.ToInt32(nupFirstY.Value);
 
-			int secondY = Convert.ToInt32(nupSecondY.Value);
 			int secondX = Convert.ToInt32(nupSecondX.Value);
+			int secondY = Convert.ToInt32(nupSecondY.Value);
+			
 
 			if (firstY >= 0)
 			{
@@ -162,9 +188,7 @@ namespace ComputerGraphics
 				secondX = pictureBoxGrid.Width / 2 - secondX * CellSpace;
 			}
 
-			int diameter = (secondX - firstX) * 4 / CellSize;
-
-			diameter += diameter > 140 ? 6 : diameter > 100 ? 4 : diameter > 40 ? 2 : 0;
+			int diameter = GetDiameter(secondX, firstX);
 
 			if (secondX - firstX == secondY - firstY)
 			{
@@ -173,7 +197,6 @@ namespace ComputerGraphics
 				Brush brush = new SolidBrush(cdCircleColor.Color);
 				Graphics.FromImage(image).FillEllipse(brush, new Rectangle(firstX - diameter, firstY - diameter, secondX - firstX + diameter * 2, secondY - firstY + diameter * 2));
 
-				
 				brush = new SolidBrush(Color.White);
 				Graphics.FromImage(image).FillRectangle(brush, new Rectangle(firstX, firstY, secondX - firstX, secondY - firstY));
 				pen = new Pen(cdSquareColor.Color, 1);
@@ -186,6 +209,12 @@ namespace ComputerGraphics
 				pictureBoxGrid.Invalidate();
 			}
 		}
+
+		private int GetDiameter(int secondX, int firstX) => GetOffsetForAngles(GetPerimeter(secondX - firstX) / CellSize);
+
+		private int GetPerimeter(int x) => x * NumberOfAngles;
+
+		private int GetOffsetForAngles(int diameter) => diameter + (diameter > 140 ? 6 : diameter > 100 ? 4 : diameter > 40 ? 2 : 0);
 
 		private void btnAddSquare_Click(object sender, EventArgs e)
 		{
@@ -211,6 +240,27 @@ namespace ComputerGraphics
 		private void btnClear_Click(object sender, EventArgs e)
 		{
 			Initialize();
+		}
+
+		private void trackBar1_Scroll(object sender, EventArgs e)
+		{
+			CellSpace = trackBar.Value * CellSize;
+
+			Initialize();
+		}
+
+		private void btnAbout_Click(object sender, EventArgs e)
+		{
+			StringBuilder stringBuilder = new StringBuilder();
+			
+			stringBuilder.AppendLine("Програма забезпечує побудову квадратів за заданими координатами " +
+			                         "двох вершин (верхньої та нижньої правої) із автоматичною побудовою " +
+			                         "описаних кіл навколо квадратів. Також забезпечено можливість вибору " +
+			                         "кольору межі квадратів та заливки кіл." + Environment.NewLine);
+
+			stringBuilder.AppendLine("Автор: Качмар Роман");
+
+			MessageBox.Show(stringBuilder.ToString(), "Довідка", MessageBoxButtons.OK, MessageBoxIcon.Information);
 		}
 	}
 }

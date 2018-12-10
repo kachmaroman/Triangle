@@ -45,11 +45,15 @@
 			this.btnCircleColor = new System.Windows.Forms.Button();
 			this.cdCircleColor = new System.Windows.Forms.ColorDialog();
 			this.btnClear = new System.Windows.Forms.Button();
+			this.trackBar = new System.Windows.Forms.TrackBar();
+			this.label7 = new System.Windows.Forms.Label();
+			this.btnAbout = new System.Windows.Forms.Button();
 			((System.ComponentModel.ISupportInitialize)(this.pictureBoxGrid)).BeginInit();
 			((System.ComponentModel.ISupportInitialize)(this.nupFirstY)).BeginInit();
 			((System.ComponentModel.ISupportInitialize)(this.nupFirstX)).BeginInit();
 			((System.ComponentModel.ISupportInitialize)(this.nupSecondX)).BeginInit();
 			((System.ComponentModel.ISupportInitialize)(this.nupSecondY)).BeginInit();
+			((System.ComponentModel.ISupportInitialize)(this.trackBar)).BeginInit();
 			this.SuspendLayout();
 			// 
 			// pictureBoxGrid
@@ -63,61 +67,67 @@
 			// label1
 			// 
 			this.label1.AutoSize = true;
+			this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.label1.Location = new System.Drawing.Point(818, 12);
 			this.label1.Name = "label1";
-			this.label1.Size = new System.Drawing.Size(119, 13);
+			this.label1.Size = new System.Drawing.Size(179, 20);
 			this.label1.TabIndex = 2;
 			this.label1.Text = "Верхня вершина (ліва)";
 			// 
 			// label2
 			// 
 			this.label2.AutoSize = true;
-			this.label2.Location = new System.Drawing.Point(818, 38);
+			this.label2.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.label2.Location = new System.Drawing.Point(818, 74);
 			this.label2.Name = "label2";
-			this.label2.Size = new System.Drawing.Size(14, 13);
+			this.label2.Size = new System.Drawing.Size(18, 16);
 			this.label2.TabIndex = 3;
 			this.label2.Text = "Y";
 			// 
 			// label3
 			// 
 			this.label3.AutoSize = true;
-			this.label3.Location = new System.Drawing.Point(818, 71);
+			this.label3.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.label3.Location = new System.Drawing.Point(819, 44);
 			this.label3.Name = "label3";
-			this.label3.Size = new System.Drawing.Size(14, 13);
+			this.label3.Size = new System.Drawing.Size(17, 16);
 			this.label3.TabIndex = 4;
 			this.label3.Text = "X";
 			// 
 			// label4
 			// 
 			this.label4.AutoSize = true;
-			this.label4.Location = new System.Drawing.Point(818, 177);
+			this.label4.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.label4.Location = new System.Drawing.Point(819, 139);
 			this.label4.Name = "label4";
-			this.label4.Size = new System.Drawing.Size(14, 13);
+			this.label4.Size = new System.Drawing.Size(17, 16);
 			this.label4.TabIndex = 9;
 			this.label4.Text = "X";
 			// 
 			// label5
 			// 
 			this.label5.AutoSize = true;
-			this.label5.Location = new System.Drawing.Point(818, 144);
+			this.label5.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.label5.Location = new System.Drawing.Point(819, 169);
 			this.label5.Name = "label5";
-			this.label5.Size = new System.Drawing.Size(14, 13);
+			this.label5.Size = new System.Drawing.Size(18, 16);
 			this.label5.TabIndex = 8;
 			this.label5.Text = "Y";
 			// 
 			// label6
 			// 
 			this.label6.AutoSize = true;
-			this.label6.Location = new System.Drawing.Point(818, 118);
+			this.label6.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.label6.Location = new System.Drawing.Point(818, 111);
 			this.label6.Name = "label6";
-			this.label6.Size = new System.Drawing.Size(127, 13);
+			this.label6.Size = new System.Drawing.Size(189, 20);
 			this.label6.TabIndex = 7;
 			this.label6.Text = "Нижня вершина (права)";
 			// 
 			// nupFirstY
 			// 
 			this.nupFirstY.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-			this.nupFirstY.Location = new System.Drawing.Point(838, 36);
+			this.nupFirstY.Location = new System.Drawing.Point(843, 72);
 			this.nupFirstY.Maximum = new decimal(new int[] {
             9,
             0,
@@ -136,7 +146,7 @@
 			// nupFirstX
 			// 
 			this.nupFirstX.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-			this.nupFirstX.Location = new System.Drawing.Point(838, 69);
+			this.nupFirstX.Location = new System.Drawing.Point(843, 42);
 			this.nupFirstX.Maximum = new decimal(new int[] {
             9,
             0,
@@ -155,7 +165,7 @@
 			// nupSecondX
 			// 
 			this.nupSecondX.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-			this.nupSecondX.Location = new System.Drawing.Point(838, 175);
+			this.nupSecondX.Location = new System.Drawing.Point(843, 137);
 			this.nupSecondX.Maximum = new decimal(new int[] {
             9,
             0,
@@ -174,7 +184,7 @@
 			// nupSecondY
 			// 
 			this.nupSecondY.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-			this.nupSecondY.Location = new System.Drawing.Point(838, 142);
+			this.nupSecondY.Location = new System.Drawing.Point(843, 167);
 			this.nupSecondY.Maximum = new decimal(new int[] {
             9,
             0,
@@ -193,9 +203,9 @@
 			// btnAddSquare
 			// 
 			this.btnAddSquare.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-			this.btnAddSquare.Location = new System.Drawing.Point(818, 359);
+			this.btnAddSquare.Location = new System.Drawing.Point(822, 556);
 			this.btnAddSquare.Name = "btnAddSquare";
-			this.btnAddSquare.Size = new System.Drawing.Size(141, 50);
+			this.btnAddSquare.Size = new System.Drawing.Size(175, 50);
 			this.btnAddSquare.TabIndex = 16;
 			this.btnAddSquare.Text = "Побудувати квадрат";
 			this.btnAddSquare.UseVisualStyleBackColor = true;
@@ -204,9 +214,9 @@
 			// btnSquareColor
 			// 
 			this.btnSquareColor.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-			this.btnSquareColor.Location = new System.Drawing.Point(818, 216);
+			this.btnSquareColor.Location = new System.Drawing.Point(822, 295);
 			this.btnSquareColor.Name = "btnSquareColor";
-			this.btnSquareColor.Size = new System.Drawing.Size(141, 54);
+			this.btnSquareColor.Size = new System.Drawing.Size(175, 54);
 			this.btnSquareColor.TabIndex = 18;
 			this.btnSquareColor.Text = "Колір межі квадрату";
 			this.btnSquareColor.UseVisualStyleBackColor = true;
@@ -215,9 +225,9 @@
 			// btnCircleColor
 			// 
 			this.btnCircleColor.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-			this.btnCircleColor.Location = new System.Drawing.Point(818, 276);
+			this.btnCircleColor.Location = new System.Drawing.Point(822, 355);
 			this.btnCircleColor.Name = "btnCircleColor";
-			this.btnCircleColor.Size = new System.Drawing.Size(141, 54);
+			this.btnCircleColor.Size = new System.Drawing.Size(175, 54);
 			this.btnCircleColor.TabIndex = 19;
 			this.btnCircleColor.Text = "Колір заливки кола";
 			this.btnCircleColor.UseVisualStyleBackColor = true;
@@ -225,19 +235,55 @@
 			// 
 			// btnClear
 			// 
-			this.btnClear.Location = new System.Drawing.Point(818, 789);
+			this.btnClear.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.btnClear.Location = new System.Drawing.Point(822, 509);
 			this.btnClear.Name = "btnClear";
-			this.btnClear.Size = new System.Drawing.Size(141, 23);
+			this.btnClear.Size = new System.Drawing.Size(175, 41);
 			this.btnClear.TabIndex = 21;
 			this.btnClear.Text = "Очистити";
 			this.btnClear.UseVisualStyleBackColor = true;
 			this.btnClear.Click += new System.EventHandler(this.btnClear_Click);
 			// 
+			// trackBar
+			// 
+			this.trackBar.Location = new System.Drawing.Point(822, 244);
+			this.trackBar.Maximum = 5;
+			this.trackBar.Minimum = 1;
+			this.trackBar.Name = "trackBar";
+			this.trackBar.Size = new System.Drawing.Size(174, 45);
+			this.trackBar.TabIndex = 22;
+			this.trackBar.Value = 1;
+			this.trackBar.Scroll += new System.EventHandler(this.trackBar1_Scroll);
+			// 
+			// label7
+			// 
+			this.label7.AutoSize = true;
+			this.label7.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.label7.Location = new System.Drawing.Point(818, 210);
+			this.label7.Name = "label7";
+			this.label7.Size = new System.Drawing.Size(123, 20);
+			this.label7.TabIndex = 23;
+			this.label7.Text = "Розмір відрізка";
+			// 
+			// btnAbout
+			// 
+			this.btnAbout.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.btnAbout.Location = new System.Drawing.Point(821, 771);
+			this.btnAbout.Name = "btnAbout";
+			this.btnAbout.Size = new System.Drawing.Size(175, 41);
+			this.btnAbout.TabIndex = 24;
+			this.btnAbout.Text = "Довідка";
+			this.btnAbout.UseVisualStyleBackColor = true;
+			this.btnAbout.Click += new System.EventHandler(this.btnAbout_Click);
+			// 
 			// Form1
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-			this.ClientSize = new System.Drawing.Size(971, 826);
+			this.ClientSize = new System.Drawing.Size(1008, 826);
+			this.Controls.Add(this.btnAbout);
+			this.Controls.Add(this.label7);
+			this.Controls.Add(this.trackBar);
 			this.Controls.Add(this.btnClear);
 			this.Controls.Add(this.btnCircleColor);
 			this.Controls.Add(this.btnSquareColor);
@@ -253,15 +299,15 @@
 			this.Controls.Add(this.label2);
 			this.Controls.Add(this.label1);
 			this.Controls.Add(this.pictureBoxGrid);
-			this.MaximumSize = new System.Drawing.Size(987, 865);
 			this.MinimumSize = new System.Drawing.Size(987, 865);
 			this.Name = "Form1";
-			this.Text = "Побудова двомірних зображень";
+			this.Text = "Побудова квадратів за заданими координатами";
 			((System.ComponentModel.ISupportInitialize)(this.pictureBoxGrid)).EndInit();
 			((System.ComponentModel.ISupportInitialize)(this.nupFirstY)).EndInit();
 			((System.ComponentModel.ISupportInitialize)(this.nupFirstX)).EndInit();
 			((System.ComponentModel.ISupportInitialize)(this.nupSecondX)).EndInit();
 			((System.ComponentModel.ISupportInitialize)(this.nupSecondY)).EndInit();
+			((System.ComponentModel.ISupportInitialize)(this.trackBar)).EndInit();
 			this.ResumeLayout(false);
 			this.PerformLayout();
 
@@ -285,6 +331,9 @@
 		private System.Windows.Forms.Button btnCircleColor;
 		private System.Windows.Forms.ColorDialog cdCircleColor;
 		private System.Windows.Forms.Button btnClear;
+		private System.Windows.Forms.TrackBar trackBar;
+		private System.Windows.Forms.Label label7;
+		private System.Windows.Forms.Button btnAbout;
 	}
 }
 
