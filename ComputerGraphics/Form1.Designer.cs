@@ -203,7 +203,7 @@
 			// btnAddSquare
 			// 
 			this.btnAddSquare.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-			this.btnAddSquare.Location = new System.Drawing.Point(822, 556);
+			this.btnAddSquare.Location = new System.Drawing.Point(822, 415);
 			this.btnAddSquare.Name = "btnAddSquare";
 			this.btnAddSquare.Size = new System.Drawing.Size(175, 50);
 			this.btnAddSquare.TabIndex = 16;
@@ -236,9 +236,9 @@
 			// btnClear
 			// 
 			this.btnClear.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-			this.btnClear.Location = new System.Drawing.Point(822, 509);
+			this.btnClear.Location = new System.Drawing.Point(822, 724);
 			this.btnClear.Name = "btnClear";
-			this.btnClear.Size = new System.Drawing.Size(175, 41);
+			this.btnClear.Size = new System.Drawing.Size(174, 41);
 			this.btnClear.TabIndex = 21;
 			this.btnClear.Text = "Очистити";
 			this.btnClear.UseVisualStyleBackColor = true;
@@ -280,7 +280,7 @@
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-			this.ClientSize = new System.Drawing.Size(1008, 826);
+			this.ClientSize = new System.Drawing.Size(1012, 826);
 			this.Controls.Add(this.btnAbout);
 			this.Controls.Add(this.label7);
 			this.Controls.Add(this.trackBar);
@@ -299,7 +299,8 @@
 			this.Controls.Add(this.label2);
 			this.Controls.Add(this.label1);
 			this.Controls.Add(this.pictureBoxGrid);
-			this.MinimumSize = new System.Drawing.Size(987, 865);
+			this.MaximumSize = new System.Drawing.Size(1028, 865);
+			this.MinimumSize = new System.Drawing.Size(1028, 865);
 			this.Name = "Form1";
 			this.Text = "Побудова квадратів за заданими координатами";
 			((System.ComponentModel.ISupportInitialize)(this.pictureBoxGrid)).EndInit();

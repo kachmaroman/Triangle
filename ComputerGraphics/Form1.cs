@@ -200,25 +200,38 @@ namespace ComputerGraphics
 
 			if (secondX - firstX == secondY - firstY)
 			{
-				pen = new Pen(cdCircleColor.Color, 1);
-				Graphics.FromImage(image).DrawEllipse(pen, new Rectangle(firstX - diameter, firstY - diameter, secondX - firstX + diameter * 2, secondY - firstY + diameter * 2));
-				Brush brush = new SolidBrush(cdCircleColor.Color);
-				Graphics.FromImage(image).FillEllipse(brush, new Rectangle(firstX - diameter, firstY - diameter, secondX - firstX + diameter * 2, secondY - firstY + diameter * 2));
+				if (secondX - firstX > 0 && secondX - firstX > 0)
+				{
+					pen = new Pen(cdCircleColor.Color, 1);
+					Graphics.FromImage(image).DrawEllipse(pen, new Rectangle(firstX - diameter, firstY - diameter, secondX - firstX + diameter * 2, secondY - firstY + diameter * 2));
+					Brush brush = new SolidBrush(cdCircleColor.Color);
+					Graphics.FromImage(image).FillEllipse(brush, new Rectangle(firstX - diameter, firstY - diameter, secondX - firstX + diameter * 2, secondY - firstY + diameter * 2));
 
-				brush = new SolidBrush(Color.White);
-				Graphics.FromImage(image).FillRectangle(brush, new Rectangle(firstX, firstY, secondX - firstX, secondY - firstY));
-				pen = new Pen(cdSquareColor.Color, 1);
-				Graphics.FromImage(image).DrawRectangle(pen, new Rectangle(firstX, firstY, secondX - firstX, secondY - firstY));
+					brush = new SolidBrush(Color.White);
+					Graphics.FromImage(image).FillRectangle(brush, new Rectangle(firstX, firstY, secondX - firstX, secondY - firstY));
+					pen = new Pen(cdSquareColor.Color, 1);
+					Graphics.FromImage(image).DrawRectangle(pen, new Rectangle(firstX, firstY, secondX - firstX, secondY - firstY));
 
-				DrawGridInsideSquare(firstX, secondX, firstY, secondY);
-				DrawCoordinateSystem();
-				DrawLabels();
+					DrawGridInsideSquare(firstX, secondX, firstY, secondY);
+					DrawCoordinateSystem();
+					DrawLabels();
 
-				pictureBoxGrid.Invalidate();
+					pictureBoxGrid.Invalidate();
+				}
+				else
+				{
+					MessageBox.Show($"Невірно задано праву нижню вершину. Задайте верхній лівій вершині координати ({Convert.ToInt32(nupSecondX.Value)}, {Convert.ToInt32(nupSecondY.Value)}), " +
+					                $"а нижній ({Convert.ToInt32(nupFirstX.Value)}, {Convert.ToInt32(nupFirstY.Value)})", "Невірні координати", MessageBoxButtons.OK, MessageBoxIcon.Information);
+				}
 			}
+			else if (secondX - firstX < 0 || secondY - firstY < 0)
+			{
+				MessageBox.Show("Невірно задано нижню праву вершину", "Невірні координати", MessageBoxButtons.OK, MessageBoxIcon.Information);
+			}
+
 			else
 			{
-				MessageBox.Show("Всі сторони мають бути рівними. Будь ласка, задайте коректні вершини", "Невірні координати", MessageBoxButtons.OK, MessageBoxIcon.Information);
+				MessageBox.Show("Всі сторони мають бути рівними. Задайте коректні вершини", "Невірні координати", MessageBoxButtons.OK, MessageBoxIcon.Information);
 			}
 		}
 
@@ -235,14 +248,9 @@ namespace ComputerGraphics
 
 		private string GetErrorMessage(int firstX, int firstY, int secondX, int secondY)
 		{
-			if (secondX - firstX < 0 || secondY - firstY < 0)
-			{
-				return "Квадрат виходить за межі координатної площини";
-			}
-
 			if (firstX == MinValueOfNumbericUpDown && firstY == MinValueOfNumbericUpDown)
 			{
-				return $"Верхня ліва вершина повинна бути меншою за ({firstX}, {firstY})";
+				return $"Верхня ліва вершина повинна бути більшою за ({firstX}, {firstY})";
 			}
 
 			if (secondX <= firstX && secondY <= firstY)
