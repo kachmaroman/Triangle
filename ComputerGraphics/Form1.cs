@@ -146,7 +146,15 @@ namespace ComputerGraphics
 
 			int secondX = Convert.ToInt32(nupSecondX.Value);
 			int secondY = Convert.ToInt32(nupSecondY.Value);
-			
+
+			string errorMessage = GetErrorMessage(firstX, firstY, secondX, secondY);
+
+			if (errorMessage != string.Empty)
+			{
+				MessageBox.Show(errorMessage, "Невірні координати", MessageBoxButtons.OK, MessageBoxIcon.Information);
+
+				return;
+			}
 
 			if (firstY >= 0)
 			{
@@ -208,6 +216,10 @@ namespace ComputerGraphics
 
 				pictureBoxGrid.Invalidate();
 			}
+			else
+			{
+				MessageBox.Show("Всі сторони мають бути рівними. Будь ласка, задайте коректні вершини", "Невірні координати", MessageBoxButtons.OK, MessageBoxIcon.Information);
+			}
 		}
 
 		private int GetDiameter(int secondX, int firstX) => GetOffsetForAngles(GetPerimeter(secondX - firstX) / CellSize);
@@ -219,6 +231,26 @@ namespace ComputerGraphics
 		private void btnAddSquare_Click(object sender, EventArgs e)
 		{
 			DrawCircumcircleBySquare();
+		}
+
+		private string GetErrorMessage(int firstX, int firstY, int secondX, int secondY)
+		{
+			if (secondX - firstX < 0 || secondY - firstY < 0)
+			{
+				return "Квадрат виходить за межі координатної площини";
+			}
+
+			if (firstX == MinValueOfNumbericUpDown && firstY == MinValueOfNumbericUpDown)
+			{
+				return $"Верхня ліва вершина повинна бути меншою за ({firstX}, {firstY})";
+			}
+
+			if (secondX <= firstX && secondY <= firstY)
+			{
+				return $"Нижня права вершина повинна бути більшою за ({firstX}, {firstY})";
+			}
+
+			return string.Empty;
 		}
 
 		private void btnSquareColor_Click(object sender, EventArgs e)
