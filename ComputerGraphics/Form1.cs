@@ -30,6 +30,30 @@ namespace ComputerGraphics
 		private Bitmap image;
 		private Pen pen;
 
+		private static int x = -4;
+		private static int y = 4;
+		private static int angle = 90;
+
+
+		private double[,] translate = {
+										{ 1, 0, x },
+										{ 0, 1, y },
+										{ 0, 0, 1 }
+									  };
+
+		private double[,] scale = {
+									{ x, 0, 0 },
+									{ 0, y, 0 },
+									{ 0, 0, 1 }
+								  };
+
+		private double[,] rotate = {
+										{  Math.Cos(angle), Math.Sin(angle), 0 },
+										{ -Math.Sin(angle), Math.Cos(angle), 0 },
+										{  0,               0,               1 }
+								   };
+
+
 		public Form1()
 		{
 			InitializeComponent();
@@ -64,9 +88,36 @@ namespace ComputerGraphics
 			DrawGrid();
 			DrawCoordinateSystem();
 			DrawLabels();
+			DrawDefaultTriangle();
 
 			pictureBoxGrid.Invalidate();
 		}
+
+
+		private void DrawDefaultTriangle()
+		{
+			int firstX = GetByCoordinateX(0);
+			int secondX = GetByCoordinateX(-5);
+			int thirdX = GetByCoordinateX(5);
+
+			int firstY = GetByCoordinateY(5);
+			int secondY = GetByCoordinateY(-5);
+			int thirdY = GetByCoordinateY(-5);
+
+			pen.Color = Color.Black;
+			pen.Width = 3;
+
+			Point[] points = new Point[3];
+			points[0] = new Point(firstX, firstY);
+			points[1] = new Point(secondX, secondY);
+			points[2] = new Point(thirdX, thirdY);
+
+			Graphics.FromImage(image).DrawPolygon(pen, points);
+			pictureBoxGrid.BackgroundImage = image;
+
+			pictureBoxGrid.Invalidate();
+		}
+
 
 		private void DrawGrid()
 		{
@@ -139,7 +190,37 @@ namespace ComputerGraphics
 			}
 		}
 
-		private void DrawCircumcircleBySquare()
+		private int GetByCoordinateY(double value)
+		{
+			if (value >= 0)
+			{
+				value = pictureBoxGrid.Height / 2.0 - value * CellSpace;
+			}
+			else
+			{
+				value = Math.Abs(value);
+				value = pictureBoxGrid.Height / 2.0 + value * CellSpace;
+			}
+
+			return Convert.ToInt32(value);
+		}
+
+		private int GetByCoordinateX(double value)
+		{
+			if (value >= 0)
+			{
+				value = pictureBoxGrid.Width / 2.0 + value * CellSpace;
+			}
+			else
+			{
+				value = Math.Abs(value);
+				value = pictureBoxGrid.Width / 2.0 - value * CellSpace;
+			}
+
+			return Convert.ToInt32(value);
+		}
+
+		private void DrawTriangle()
 		{
 			int firstX = Convert.ToInt32(nupFirstX.Value);
 			int firstY = Convert.ToInt32(nupFirstY.Value);
@@ -147,135 +228,66 @@ namespace ComputerGraphics
 			int secondX = Convert.ToInt32(nupSecondX.Value);
 			int secondY = Convert.ToInt32(nupSecondY.Value);
 
-			string errorMessage = GetErrorMessage(firstX, firstY, secondX, secondY);
+			double[,] triangleMatrix = new double[2, 3] { { 0, -5, 5 }, { 5, -5, -5 } };
 
-			if (errorMessage != string.Empty)
+			double[,] firstTranslate =
 			{
-				MessageBox.Show(errorMessage, "Невірні координати", MessageBoxButtons.OK, MessageBoxIcon.Information);
+				{ 1, 0, firstX },
+				{ 0, 1, firstY },
+				{ 0, 0, 1 }
+			};
 
-				return;
-			}
+			double[,] firstScale = {
+				{ secondX, 0, 0 },
+				{ 0, secondY, 0 },
+				{ 0, 0, 1 }
+			};
 
-			if (firstY >= 0)
-			{
-				firstY = pictureBoxGrid.Height / 2 - firstY * CellSpace;
-			}
-			else
-			{
-				firstY = Math.Abs(firstY);
-				firstY = pictureBoxGrid.Height / 2 + firstY * CellSpace;
-			}
+			var result = MatrixMult(firstTranslate, firstScale);
 
-			if (firstX >= 0)
-			{
-				firstX = pictureBoxGrid.Width / 2 + firstX * CellSpace;
-			}
-			else
-			{
-				firstX = Math.Abs(firstX);
-				firstX = pictureBoxGrid.Width / 2 - firstX * CellSpace;
-			}
+			double[,] resultMatrix = result;
 
-			if (secondY >= 0)
-			{
-				secondY = pictureBoxGrid.Height / 2 - secondY * CellSpace;
-			}
-			else
-			{
-				secondY = Math.Abs(secondY);
-				secondY = pictureBoxGrid.Height / 2 + secondY * CellSpace;
-			}
+			//double[,] secondTranslate = 
+			//{
+			//	{ 1, 0, secondX },
+			//	{ 0, 1, secondY },
+			//	{ 0, 0, 1 }
+			//};
 
-			if (secondX >= 0)
-			{
-				secondX = pictureBoxGrid.Width / 2 + secondX * CellSpace;
-			}
-			else
-			{
-				secondX = Math.Abs(secondX);
-				secondX = pictureBoxGrid.Width / 2 - secondX * CellSpace;
-			}
+			//double[,] secondScale = {
+			//	{ secondX, 0, 0 },
+			//	{ 0, secondY, 0 },
+			//	{ 0, 0, 1 }
+			//};
 
-			int diameter = GetDiameter(secondX, firstX);
+			//resultMatrix = AffinaMult(resultMatrix, secondScale);
 
-			if (secondX - firstX == secondY - firstY)
-			{
-				if (secondX - firstX > 0 && secondX - firstX > 0)
-				{
-					pen = new Pen(cdCircleColor.Color, 1);
-					Graphics.FromImage(image).DrawEllipse(pen, new Rectangle(firstX - diameter, firstY - diameter, secondX - firstX + diameter * 2, secondY - firstY + diameter * 2));
-					Brush brush = new SolidBrush(cdCircleColor.Color);
-					Graphics.FromImage(image).FillEllipse(brush, new Rectangle(firstX - diameter, firstY - diameter, secondX - firstX + diameter * 2, secondY - firstY + diameter * 2));
+			firstX = GetByCoordinateX(resultMatrix[0, 0]);
+			firstY = GetByCoordinateY(resultMatrix[1, 0]);
 
-					brush = new SolidBrush(Color.White);
-					Graphics.FromImage(image).FillRectangle(brush, new Rectangle(firstX, firstY, secondX - firstX, secondY - firstY));
-					pen = new Pen(cdSquareColor.Color, 1);
-					Graphics.FromImage(image).DrawRectangle(pen, new Rectangle(firstX, firstY, secondX - firstX, secondY - firstY));
+			secondX = GetByCoordinateX(resultMatrix[0, 1]);
+			secondY = GetByCoordinateY(resultMatrix[1, 1]);
 
-					DrawGridInsideSquare(firstX, secondX, firstY, secondY);
-					DrawCoordinateSystem();
-					DrawLabels();
+			int thirdX = GetByCoordinateX(resultMatrix[0, 2]);
+			int thirdY = GetByCoordinateY(resultMatrix[1, 2]);
 
-					pictureBoxGrid.Invalidate();
-				}
-				else
-				{
-					MessageBox.Show($"Невірно задано праву нижню вершину. Задайте верхній лівій вершині координати ({Convert.ToInt32(nupSecondX.Value)}, {Convert.ToInt32(nupSecondY.Value)}), " +
-					                $"а нижній ({Convert.ToInt32(nupFirstX.Value)}, {Convert.ToInt32(nupFirstY.Value)})", "Невірні координати", MessageBoxButtons.OK, MessageBoxIcon.Information);
-				}
-			}
-			else if (secondX - firstX < 0 || secondY - firstY < 0)
-			{
-				MessageBox.Show("Невірно задано нижню праву вершину", "Невірні координати", MessageBoxButtons.OK, MessageBoxIcon.Information);
-			}
+			Point[] points = new Point[3];
+			points[0] = new Point(firstX, firstY);
+			points[1] = new Point(secondX, secondY);
+			points[2] = new Point(thirdX, thirdY);
 
-			else
-			{
-				MessageBox.Show("Всі сторони мають бути рівними. Задайте коректні вершини", "Невірні координати", MessageBoxButtons.OK, MessageBoxIcon.Information);
-			}
+			Graphics.FromImage(image).DrawPolygon(pen, points);
+			pictureBoxGrid.BackgroundImage = image;
+
+			pictureBoxGrid.Invalidate();
+
 		}
-
-		private int GetDiameter(int secondX, int firstX) => GetOffsetForAngles(GetPerimeter(secondX - firstX) / CellSize);
-
-		private int GetPerimeter(int x) => x * NumberOfAngles;
-
-		private int GetOffsetForAngles(int diameter) => diameter + (diameter > 140 ? 6 : diameter > 100 ? 4 : diameter > 40 ? 2 : 0);
 
 		private void btnAddSquare_Click(object sender, EventArgs e)
 		{
-			DrawCircumcircleBySquare();
+			DrawTriangle();
 		}
 
-		private string GetErrorMessage(int firstX, int firstY, int secondX, int secondY)
-		{
-			if (firstX == MinValueOfNumbericUpDown && firstY == MinValueOfNumbericUpDown)
-			{
-				return $"Верхня ліва вершина повинна бути більшою за ({firstX}, {firstY})";
-			}
-
-			if (secondX <= firstX && secondY <= firstY)
-			{
-				return $"Нижня права вершина повинна бути більшою за ({firstX}, {firstY})";
-			}
-
-			return string.Empty;
-		}
-
-		private void btnSquareColor_Click(object sender, EventArgs e)
-		{
-			if (cdSquareColor.ShowDialog() == DialogResult.OK)
-			{
-				btnSquareColor.ForeColor = cdSquareColor.Color;
-			}
-		}
-
-		private void btnCircleColor_Click(object sender, EventArgs e)
-		{
-			if (cdCircleColor.ShowDialog() == DialogResult.OK)
-			{
-				btnCircleColor.ForeColor = cdCircleColor.Color;
-			}
-		}
 
 		private void btnClear_Click(object sender, EventArgs e)
 		{
@@ -289,18 +301,40 @@ namespace ComputerGraphics
 			Initialize();
 		}
 
-		private void btnAbout_Click(object sender, EventArgs e)
+		private double[,] AffinaMult(double[,] triangleMatrix, double[,] affinMaxtix)
 		{
-			StringBuilder stringBuilder = new StringBuilder();
-			
-			stringBuilder.AppendLine("Програма забезпечує побудову квадратів за заданими координатами " +
-			                         "двох вершин (верхньої та нижньої правої) із автоматичною побудовою " +
-			                         "описаних кіл навколо квадратів. Також забезпечено можливість вибору " +
-			                         "кольору межі квадратів та заливки кіл." + Environment.NewLine);
+			double[,] resultMatrix = new double[2, 3];
 
-			stringBuilder.AppendLine("Автор: Качмар Роман");
+			for (int i = 0; i < triangleMatrix.Rank; i++)
+			{
+				for (int j = 0; j <= triangleMatrix.Rank; j++)
+				{
+					for (int k = 0; k <= triangleMatrix.Rank; k++)
+					{
+						resultMatrix[i, j] += triangleMatrix[i, j] * affinMaxtix[k, j];
+					}
+				}
+			}
 
-			MessageBox.Show(stringBuilder.ToString(), "Довідка", MessageBoxButtons.OK, MessageBoxIcon.Information);
+			return resultMatrix;
+		}
+
+		private double[,] MatrixMult(double[,] triangleMatrix, double[,] affinMaxtix)
+		{
+			double[,] resultMatrix = new double[3, 3];
+
+			for (int i = 0; i <= triangleMatrix.Rank; i++)
+			{
+				for (int j = 0; j <= triangleMatrix.Rank; j++)
+				{
+					for (int k = 0; k <= triangleMatrix.Rank; k++)
+					{
+						resultMatrix[i, j] += triangleMatrix[i, j] * affinMaxtix[k, j];
+					}
+				}
+			}
+
+			return resultMatrix;
 		}
 	}
 }

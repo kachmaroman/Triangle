@@ -40,14 +40,9 @@
 			this.nupSecondX = new System.Windows.Forms.NumericUpDown();
 			this.nupSecondY = new System.Windows.Forms.NumericUpDown();
 			this.btnAddSquare = new System.Windows.Forms.Button();
-			this.cdSquareColor = new System.Windows.Forms.ColorDialog();
-			this.btnSquareColor = new System.Windows.Forms.Button();
-			this.btnCircleColor = new System.Windows.Forms.Button();
-			this.cdCircleColor = new System.Windows.Forms.ColorDialog();
 			this.btnClear = new System.Windows.Forms.Button();
 			this.trackBar = new System.Windows.Forms.TrackBar();
 			this.label7 = new System.Windows.Forms.Label();
-			this.btnAbout = new System.Windows.Forms.Button();
 			((System.ComponentModel.ISupportInitialize)(this.pictureBoxGrid)).BeginInit();
 			((System.ComponentModel.ISupportInitialize)(this.nupFirstY)).BeginInit();
 			((System.ComponentModel.ISupportInitialize)(this.nupFirstX)).BeginInit();
@@ -203,40 +198,18 @@
 			// btnAddSquare
 			// 
 			this.btnAddSquare.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-			this.btnAddSquare.Location = new System.Drawing.Point(822, 415);
+			this.btnAddSquare.Location = new System.Drawing.Point(822, 295);
 			this.btnAddSquare.Name = "btnAddSquare";
 			this.btnAddSquare.Size = new System.Drawing.Size(175, 50);
 			this.btnAddSquare.TabIndex = 16;
-			this.btnAddSquare.Text = "Побудувати квадрат";
+			this.btnAddSquare.Text = "Побудувати трикутник";
 			this.btnAddSquare.UseVisualStyleBackColor = true;
 			this.btnAddSquare.Click += new System.EventHandler(this.btnAddSquare_Click);
-			// 
-			// btnSquareColor
-			// 
-			this.btnSquareColor.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-			this.btnSquareColor.Location = new System.Drawing.Point(822, 295);
-			this.btnSquareColor.Name = "btnSquareColor";
-			this.btnSquareColor.Size = new System.Drawing.Size(175, 54);
-			this.btnSquareColor.TabIndex = 18;
-			this.btnSquareColor.Text = "Колір межі квадрату";
-			this.btnSquareColor.UseVisualStyleBackColor = true;
-			this.btnSquareColor.Click += new System.EventHandler(this.btnSquareColor_Click);
-			// 
-			// btnCircleColor
-			// 
-			this.btnCircleColor.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-			this.btnCircleColor.Location = new System.Drawing.Point(822, 355);
-			this.btnCircleColor.Name = "btnCircleColor";
-			this.btnCircleColor.Size = new System.Drawing.Size(175, 54);
-			this.btnCircleColor.TabIndex = 19;
-			this.btnCircleColor.Text = "Колір заливки кола";
-			this.btnCircleColor.UseVisualStyleBackColor = true;
-			this.btnCircleColor.Click += new System.EventHandler(this.btnCircleColor_Click);
 			// 
 			// btnClear
 			// 
 			this.btnClear.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-			this.btnClear.Location = new System.Drawing.Point(822, 724);
+			this.btnClear.Location = new System.Drawing.Point(823, 362);
 			this.btnClear.Name = "btnClear";
 			this.btnClear.Size = new System.Drawing.Size(174, 41);
 			this.btnClear.TabIndex = 21;
@@ -265,28 +238,14 @@
 			this.label7.TabIndex = 23;
 			this.label7.Text = "Розмір відрізка";
 			// 
-			// btnAbout
-			// 
-			this.btnAbout.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-			this.btnAbout.Location = new System.Drawing.Point(821, 771);
-			this.btnAbout.Name = "btnAbout";
-			this.btnAbout.Size = new System.Drawing.Size(175, 41);
-			this.btnAbout.TabIndex = 24;
-			this.btnAbout.Text = "Довідка";
-			this.btnAbout.UseVisualStyleBackColor = true;
-			this.btnAbout.Click += new System.EventHandler(this.btnAbout_Click);
-			// 
 			// Form1
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.ClientSize = new System.Drawing.Size(1012, 826);
-			this.Controls.Add(this.btnAbout);
 			this.Controls.Add(this.label7);
 			this.Controls.Add(this.trackBar);
 			this.Controls.Add(this.btnClear);
-			this.Controls.Add(this.btnCircleColor);
-			this.Controls.Add(this.btnSquareColor);
 			this.Controls.Add(this.btnAddSquare);
 			this.Controls.Add(this.nupSecondX);
 			this.Controls.Add(this.nupSecondY);
@@ -327,14 +286,9 @@
 		private System.Windows.Forms.NumericUpDown nupSecondX;
 		private System.Windows.Forms.NumericUpDown nupSecondY;
 		private System.Windows.Forms.Button btnAddSquare;
-		private System.Windows.Forms.ColorDialog cdSquareColor;
-		private System.Windows.Forms.Button btnSquareColor;
-		private System.Windows.Forms.Button btnCircleColor;
-		private System.Windows.Forms.ColorDialog cdCircleColor;
 		private System.Windows.Forms.Button btnClear;
 		private System.Windows.Forms.TrackBar trackBar;
 		private System.Windows.Forms.Label label7;
-		private System.Windows.Forms.Button btnAbout;
 	}
 }
 
