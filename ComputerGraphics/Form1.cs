@@ -16,36 +16,21 @@ namespace ComputerGraphics
 	{
 		private const int NumOfCells = 100;
 		private const int CellSize = 20;
+		private const int CellSpace = 20;
 		private const int Offset = 5;
-		private const int NumberOfAngles = 4;
 		private const int UpUpSpaceFromCoordinateLine = 25;
 		private const int BottomSpaceFromCoordinateLine = 10;
 
-		private int CellSpace;
-		private int MaxValueOfCoordinate;
 
+		private int MaxValueOfCoordinate;
 		private int MaxValueOfNumericUpDown;
 		private int MinValueOfNumbericUpDown;
 
 		private Bitmap image;
 		private Pen pen;
 
-		private static int x = -4;
-		private static int y = 4;
-		private static int angle = 90;
+		private static double angle = 90 * Math.PI / 180;
 
-
-		private double[,] translate = {
-										{ 1, 0, x },
-										{ 0, 1, y },
-										{ 0, 0, 1 }
-									  };
-
-		private double[,] scale = {
-									{ x, 0, 0 },
-									{ 0, y, 0 },
-									{ 0, 0, 1 }
-								  };
 
 		private double[,] rotate = {
 										{  Math.Cos(angle), Math.Sin(angle), 0 },
@@ -63,21 +48,16 @@ namespace ComputerGraphics
 
 		private void Initialize()
 		{
-			CellSpace = trackBar.Value * CellSize;
 			MaxValueOfCoordinate = Convert.ToInt32(Math.Ceiling(pictureBoxGrid.Height / 2.0 / CellSpace));
 
 			MaxValueOfNumericUpDown = MaxValueOfCoordinate - 1;
 			MinValueOfNumbericUpDown = MaxValueOfNumericUpDown * -1;
 
-			nupFirstX.Minimum = MinValueOfNumbericUpDown;
-			nupFirstX.Maximum = MaxValueOfNumericUpDown;
-			nupFirstY.Minimum = MinValueOfNumbericUpDown;
-			nupFirstY.Maximum = MaxValueOfNumericUpDown;
+			nupX.Minimum = MinValueOfNumbericUpDown;
+			nupY.Minimum = MinValueOfNumbericUpDown;
 
-			nupSecondX.Minimum = MinValueOfNumbericUpDown;
-			nupSecondX.Maximum = MaxValueOfNumericUpDown;
-			nupSecondY.Minimum = MinValueOfNumbericUpDown;
-			nupSecondY.Maximum = MaxValueOfNumericUpDown;
+			nupX.Maximum = MaxValueOfNumericUpDown;
+			nupY.Maximum = MaxValueOfNumericUpDown;
 
 			image = new Bitmap(pictureBoxGrid.Width, pictureBoxGrid.Height, PixelFormat.Format32bppRgb);
 			pen = new Pen(Color.Gray, 1);
@@ -100,9 +80,9 @@ namespace ComputerGraphics
 			int secondX = GetByCoordinateX(-5);
 			int thirdX = GetByCoordinateX(5);
 
-			int firstY = GetByCoordinateY(5);
-			int secondY = GetByCoordinateY(-5);
-			int thirdY = GetByCoordinateY(-5);
+			int firstY = GetByCoordinateY(8);
+			int secondY = GetByCoordinateY(2);
+			int thirdY = GetByCoordinateY(2);
 
 			pen.Color = Color.Black;
 			pen.Width = 3;
@@ -117,7 +97,6 @@ namespace ComputerGraphics
 
 			pictureBoxGrid.Invalidate();
 		}
-
 
 		private void DrawGrid()
 		{
@@ -175,21 +154,6 @@ namespace ComputerGraphics
 			}
 		}
 
-		private void DrawGridInsideSquare(int firstX, int secondX, int firstY, int secondY)
-		{
-			pen = new Pen(Color.Black, 1);
-
-			for (int i = firstX + CellSize; i < secondX; i += CellSize)
-			{
-				Graphics.FromImage(image).DrawLine(pen, i, firstY, i, secondY);
-			}
-
-			for (int i = firstY + CellSize; i < secondY; i += CellSize)
-			{
-				Graphics.FromImage(image).DrawLine(pen, firstX, i, secondX, i);
-			}
-		}
-
 		private int GetByCoordinateY(double value)
 		{
 			if (value >= 0)
@@ -222,51 +186,32 @@ namespace ComputerGraphics
 
 		private void DrawTriangle()
 		{
-			int firstX = Convert.ToInt32(nupFirstX.Value);
-			int firstY = Convert.ToInt32(nupFirstY.Value);
+			int x = Convert.ToInt32(nupX.Value);
+			int y = Convert.ToInt32(nupY.Value);
 
-			int secondX = Convert.ToInt32(nupSecondX.Value);
-			int secondY = Convert.ToInt32(nupSecondY.Value);
-
-			double[,] triangleMatrix = new double[2, 3] { { 0, -5, 5 }, { 5, -5, -5 } };
+			double[,] triangleMatrix = new double[2, 3] { { 0, -5, 5 }, { 8, 2, 2 } };
 
 			double[,] firstTranslate =
 			{
-				{ 1, 0, firstX },
-				{ 0, 1, firstY },
+				{ 1, 0, x },
+				{ 0, 1, y },
 				{ 0, 0, 1 }
 			};
 
 			double[,] firstScale = {
-				{ secondX, 0, 0 },
-				{ 0, secondY, 0 },
+				{ x, 0, 0 },
+				{ 0, y, 0 },
 				{ 0, 0, 1 }
 			};
 
-			var result = MatrixMult(firstTranslate, firstScale);
+			double[,] resultMatrix = AffinaMult(triangleMatrix, firstScale);
+			resultMatrix = AffinaMult(resultMatrix, rotate);
 
-			double[,] resultMatrix = result;
+			int firstX = GetByCoordinateX(resultMatrix[0, 0]);
+			int firstY = GetByCoordinateY(resultMatrix[1, 0]);
 
-			//double[,] secondTranslate = 
-			//{
-			//	{ 1, 0, secondX },
-			//	{ 0, 1, secondY },
-			//	{ 0, 0, 1 }
-			//};
-
-			//double[,] secondScale = {
-			//	{ secondX, 0, 0 },
-			//	{ 0, secondY, 0 },
-			//	{ 0, 0, 1 }
-			//};
-
-			//resultMatrix = AffinaMult(resultMatrix, secondScale);
-
-			firstX = GetByCoordinateX(resultMatrix[0, 0]);
-			firstY = GetByCoordinateY(resultMatrix[1, 0]);
-
-			secondX = GetByCoordinateX(resultMatrix[0, 1]);
-			secondY = GetByCoordinateY(resultMatrix[1, 1]);
+			int secondX = GetByCoordinateX(resultMatrix[0, 1]);
+			int secondY = GetByCoordinateY(resultMatrix[1, 1]);
 
 			int thirdX = GetByCoordinateX(resultMatrix[0, 2]);
 			int thirdY = GetByCoordinateY(resultMatrix[1, 2]);
@@ -280,7 +225,6 @@ namespace ComputerGraphics
 			pictureBoxGrid.BackgroundImage = image;
 
 			pictureBoxGrid.Invalidate();
-
 		}
 
 		private void btnAddSquare_Click(object sender, EventArgs e)
@@ -288,16 +232,8 @@ namespace ComputerGraphics
 			DrawTriangle();
 		}
 
-
 		private void btnClear_Click(object sender, EventArgs e)
 		{
-			Initialize();
-		}
-
-		private void trackBar1_Scroll(object sender, EventArgs e)
-		{
-			CellSpace = trackBar.Value * CellSize;
-
 			Initialize();
 		}
 
