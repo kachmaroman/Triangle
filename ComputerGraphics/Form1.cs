@@ -23,20 +23,11 @@ namespace ComputerGraphics
 
 
 		private int MaxValueOfCoordinate;
-		private int MaxValueOfNumericUpDown;
-		private int MinValueOfNumbericUpDown;
 
 		private Bitmap image;
 		private Pen pen;
 
-		private static double angle = 90 * Math.PI / 180;
-
-
-		private double[,] rotate = {
-										{  Math.Cos(angle), Math.Sin(angle), 0 },
-										{ -Math.Sin(angle), Math.Cos(angle), 0 },
-										{  0,               0,               1 }
-								   };
+		private double[,] triangleMatrix = new double[2, 3] { { 0, -3, 3 }, { 2, -2, -2 } };
 
 
 		public Form1()
@@ -49,15 +40,6 @@ namespace ComputerGraphics
 		private void Initialize()
 		{
 			MaxValueOfCoordinate = Convert.ToInt32(Math.Ceiling(pictureBoxGrid.Height / 2.0 / CellSpace));
-
-			MaxValueOfNumericUpDown = MaxValueOfCoordinate - 1;
-			MinValueOfNumbericUpDown = MaxValueOfNumericUpDown * -1;
-
-			nupX.Minimum = MinValueOfNumbericUpDown;
-			nupY.Minimum = MinValueOfNumbericUpDown;
-
-			nupX.Maximum = MaxValueOfNumericUpDown;
-			nupY.Maximum = MaxValueOfNumericUpDown;
 
 			image = new Bitmap(pictureBoxGrid.Width, pictureBoxGrid.Height, PixelFormat.Format32bppRgb);
 			pen = new Pen(Color.Gray, 1);
@@ -76,13 +58,13 @@ namespace ComputerGraphics
 
 		private void DrawDefaultTriangle()
 		{
-			int firstX = GetByCoordinateX(0);
-			int secondX = GetByCoordinateX(-5);
-			int thirdX = GetByCoordinateX(5);
+			int firstX = GetByCoordinateX(triangleMatrix[0, 0]);
+			int secondX = GetByCoordinateX(triangleMatrix[0, 1]);
+			int thirdX = GetByCoordinateX(triangleMatrix[0, 2]);
 
-			int firstY = GetByCoordinateY(8);
-			int secondY = GetByCoordinateY(2);
-			int thirdY = GetByCoordinateY(2);
+			int firstY = GetByCoordinateY(triangleMatrix[1, 0]);
+			int secondY = GetByCoordinateY(triangleMatrix[1, 1]);
+			int thirdY = GetByCoordinateY(triangleMatrix[1, 2]);
 
 			pen.Color = Color.Black;
 			pen.Width = 3;
@@ -189,23 +171,29 @@ namespace ComputerGraphics
 			int x = Convert.ToInt32(nupX.Value);
 			int y = Convert.ToInt32(nupY.Value);
 
-			double[,] triangleMatrix = new double[2, 3] { { 0, -5, 5 }, { 8, 2, 2 } };
+			//double[,] translate =
+			//{
+			//	{ 1, 0, x },
+			//	{ 0, 1, y },
+			//	{ 0, 0, 1 }
+			//};
 
-			double[,] firstTranslate =
-			{
-				{ 1, 0, x },
-				{ 0, 1, y },
-				{ 0, 0, 1 }
-			};
-
-			double[,] firstScale = {
+			double[,] scale = {
 				{ x, 0, 0 },
 				{ 0, y, 0 },
 				{ 0, 0, 1 }
 			};
 
-			double[,] resultMatrix = AffinaMult(triangleMatrix, firstScale);
-			resultMatrix = AffinaMult(resultMatrix, rotate);
+			double angle = Convert.ToDouble(nupDegree.Value) * Math.PI / 180;
+
+			double[,] rotate = {
+				{  Math.Cos(angle), Math.Sin(angle), 0 },
+				{ -Math.Sin(angle), Math.Cos(angle), 0 },
+				{  0,               0,               1 }
+			};
+
+			double[,] resultMatrix = AffinaMult(triangleMatrix, rotate);
+			resultMatrix = AffinaMult(resultMatrix, scale);
 
 			int firstX = GetByCoordinateX(resultMatrix[0, 0]);
 			int firstY = GetByCoordinateY(resultMatrix[1, 0]);
@@ -215,6 +203,37 @@ namespace ComputerGraphics
 
 			int thirdX = GetByCoordinateX(resultMatrix[0, 2]);
 			int thirdY = GetByCoordinateY(resultMatrix[1, 2]);
+
+			if((firstX < 0  || firstX > 800  ||
+			    secondX < 0 || secondX > 800 ||
+			    thirdX < 0  || thirdX > 800) ||
+			   (firstY < 0  || firstY > 800  ||
+			    secondY < 0 || secondY > 800 ||
+			    thirdY < 0  || thirdY > 800))
+			{
+				MessageBox.Show("Трикутник виходить за межі координат!", "Невірні координати", MessageBoxButtons.OK, MessageBoxIcon.Information);
+
+				return;
+			}
+
+			if ((x == 0 && y == 0) || (x == 1 && y == 1))
+			{
+				MessageBox.Show("Неможливо побудувати трикутник. Х та У не можуть = 0 або 1!", "Невірні координати", MessageBoxButtons.OK, MessageBoxIcon.Information);
+
+				return;
+			}
+
+			image = new Bitmap(pictureBoxGrid.Width, pictureBoxGrid.Height, PixelFormat.Format32bppRgb);
+			pen = new Pen(Color.Gray, 1);
+
+			Graphics.FromImage(image).Clear(Color.White);
+			pictureBoxGrid.BackgroundImage = image;
+
+			DrawGrid();
+			DrawCoordinateSystem();
+			DrawLabels();
+
+			pictureBoxGrid.Invalidate();
 
 			Point[] points = new Point[3];
 			points[0] = new Point(firstX, firstY);
