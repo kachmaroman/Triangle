@@ -27,7 +27,7 @@ namespace ComputerGraphics
 		private Bitmap image;
 		private Pen pen;
 
-		private double[,] triangleMatrix = new double[2, 3] { { 0, -3, 3 }, { 2, -2, -2 } };
+		private double[,] triangleMatrix = new double[3, 3] { { -3, 4, 1 }, { -1, -1, 1 }, {1, 1, 1} };
 
 
 		public Form1()
@@ -58,21 +58,23 @@ namespace ComputerGraphics
 
 		private void DrawDefaultTriangle()
 		{
-			int firstX = GetByCoordinateX(triangleMatrix[0, 0]);
-			int secondX = GetByCoordinateX(triangleMatrix[0, 1]);
-			int thirdX = GetByCoordinateX(triangleMatrix[0, 2]);
+			float firstX = GetByCoordinateX(triangleMatrix[0, 0]);
+			float firstY = GetByCoordinateY(triangleMatrix[0, 1]);
 
-			int firstY = GetByCoordinateY(triangleMatrix[1, 0]);
-			int secondY = GetByCoordinateY(triangleMatrix[1, 1]);
-			int thirdY = GetByCoordinateY(triangleMatrix[1, 2]);
+
+			float secondX = GetByCoordinateX(triangleMatrix[1, 0]);
+			float secondY = GetByCoordinateY(triangleMatrix[1, 1]);
+
+			float thirdX = GetByCoordinateX(triangleMatrix[2, 0]);
+			float thirdY = GetByCoordinateY(triangleMatrix[2, 1]);
 
 			pen.Color = Color.Black;
 			pen.Width = 3;
 
-			Point[] points = new Point[3];
-			points[0] = new Point(firstX, firstY);
-			points[1] = new Point(secondX, secondY);
-			points[2] = new Point(thirdX, thirdY);
+			PointF[] points = new PointF[3];
+			points[0] = new PointF(firstX, firstY);
+			points[1] = new PointF(secondX, secondY);
+			points[2] = new PointF(thirdX, thirdY);
 
 			Graphics.FromImage(image).DrawPolygon(pen, points);
 			pictureBoxGrid.BackgroundImage = image;
@@ -136,7 +138,7 @@ namespace ComputerGraphics
 			}
 		}
 
-		private int GetByCoordinateY(double value)
+		private float GetByCoordinateY(double value)
 		{
 			if (value >= 0)
 			{
@@ -148,10 +150,10 @@ namespace ComputerGraphics
 				value = pictureBoxGrid.Height / 2.0 + value * CellSpace;
 			}
 
-			return Convert.ToInt32(value);
+			return Convert.ToSingle(value);
 		}
 
-		private int GetByCoordinateX(double value)
+		private float GetByCoordinateX(double value)
 		{
 			if (value >= 0)
 			{
@@ -163,7 +165,7 @@ namespace ComputerGraphics
 				value = pictureBoxGrid.Width / 2.0 - value * CellSpace;
 			}
 
-			return Convert.ToInt32(value);
+			return Convert.ToSingle(value);
 		}
 
 		private void DrawTriangle()
@@ -179,66 +181,68 @@ namespace ComputerGraphics
 			//};
 
 			double[,] scale = {
-				{ x, 0, 0 },
-				{ 0, y, 0 },
-				{ 0, 0, 1 }
+				{ 1, 2, 0 },
+				{ -1, 1, 0 },
+				{ 3, 2,  1 }
 			};
+
+			Matrix matrix = new Matrix(1, 1, 1, 1, 1, 11);
 
 			double angle = Convert.ToDouble(nupDegree.Value) * Math.PI / 180;
 
 			double[,] rotate = {
-				{  Math.Cos(angle), Math.Sin(angle), 0 },
-				{ -Math.Sin(angle), Math.Cos(angle), 0 },
+				{  Math.Cos(angle), -Math.Sin(angle), 0 },
+				{  Math.Sin(angle), Math.Cos(angle), 0 },
 				{  0,               0,               1 }
 			};
 
 			double[,] resultMatrix = AffinaMult(triangleMatrix, rotate);
-			resultMatrix = AffinaMult(resultMatrix, scale);
 
-			int firstX = GetByCoordinateX(resultMatrix[0, 0]);
-			int firstY = GetByCoordinateY(resultMatrix[1, 0]);
+			float firstX = GetByCoordinateX(resultMatrix[0, 0]);
+			float firstY = GetByCoordinateY(resultMatrix[0, 1]);
 
-			int secondX = GetByCoordinateX(resultMatrix[0, 1]);
-			int secondY = GetByCoordinateY(resultMatrix[1, 1]);
+			float secondX = GetByCoordinateX(resultMatrix[1, 0]);
+			float secondY = GetByCoordinateY(resultMatrix[1, 1]);
 
-			int thirdX = GetByCoordinateX(resultMatrix[0, 2]);
-			int thirdY = GetByCoordinateY(resultMatrix[1, 2]);
+			float thirdX = GetByCoordinateX(resultMatrix[2, 0]);
+			float thirdY = GetByCoordinateY(resultMatrix[2, 1]);
 
-			if((firstX < 0  || firstX > 800  ||
-			    secondX < 0 || secondX > 800 ||
-			    thirdX < 0  || thirdX > 800) ||
-			   (firstY < 0  || firstY > 800  ||
-			    secondY < 0 || secondY > 800 ||
-			    thirdY < 0  || thirdY > 800))
-			{
-				MessageBox.Show("Трикутник виходить за межі координат!", "Невірні координати", MessageBoxButtons.OK, MessageBoxIcon.Information);
+			//if((firstX < 0  || firstX > 800  ||
+			//    secondX < 0 || secondX > 800 ||
+			//    thirdX < 0  || thirdX > 800) ||
+			//   (firstY < 0  || firstY > 800  ||
+			//    secondY < 0 || secondY > 800 ||
+			//    thirdY < 0  || thirdY > 800))
+			//{
+			//	MessageBox.Show("Трикутник виходить за межі координат!", "Невірні координати", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
-				return;
-			}
+			//	return;
+			//}
 
-			if ((x == 0 && y == 0) || (x == 1 && y == 1))
-			{
-				MessageBox.Show("Неможливо побудувати трикутник. Х та У не можуть = 0 або 1!", "Невірні координати", MessageBoxButtons.OK, MessageBoxIcon.Information);
+			//if ((x == 0 && y == 0) || (x == 1 && y == 1))
+			//{
+			//	MessageBox.Show("Неможливо побудувати трикутник. Х та У не можуть = 0 або 1!", "Невірні координати", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
-				return;
-			}
+			//	return;
+			//}
 
-			image = new Bitmap(pictureBoxGrid.Width, pictureBoxGrid.Height, PixelFormat.Format32bppRgb);
-			pen = new Pen(Color.Gray, 1);
 
-			Graphics.FromImage(image).Clear(Color.White);
-			pictureBoxGrid.BackgroundImage = image;
+			//image = new Bitmap(pictureBoxGrid.Width, pictureBoxGrid.Height, PixelFormat.Format32bppRgb);
+			//pen = new Pen(Color.Gray, 1);
 
-			DrawGrid();
-			DrawCoordinateSystem();
-			DrawLabels();
+			//Graphics.FromImage(image).Clear(Color.White);
+			//pictureBoxGrid.BackgroundImage = image;
 
-			pictureBoxGrid.Invalidate();
+			//DrawGrid();
+			//DrawCoordinateSystem();
+			//DrawLabels();
 
-			Point[] points = new Point[3];
-			points[0] = new Point(firstX, firstY);
-			points[1] = new Point(secondX, secondY);
-			points[2] = new Point(thirdX, thirdY);
+			//pictureBoxGrid.Invalidate();
+
+			PointF[] points = new PointF[3];
+			points[0] = new PointF(firstX, firstY);
+			points[1] = new PointF(secondX, secondY);
+			points[2] = new PointF(thirdX, thirdY);
 
 			Graphics.FromImage(image).DrawPolygon(pen, points);
 			pictureBoxGrid.BackgroundImage = image;
@@ -258,15 +262,15 @@ namespace ComputerGraphics
 
 		private double[,] AffinaMult(double[,] triangleMatrix, double[,] affinMaxtix)
 		{
-			double[,] resultMatrix = new double[2, 3];
+			double[,] resultMatrix = new double[3, 3];
 
-			for (int i = 0; i < triangleMatrix.Rank; i++)
+			for (int i = 0; i <= triangleMatrix.Rank; i++)
 			{
 				for (int j = 0; j <= triangleMatrix.Rank; j++)
 				{
 					for (int k = 0; k <= triangleMatrix.Rank; k++)
 					{
-						resultMatrix[i, j] += triangleMatrix[i, j] * affinMaxtix[k, j];
+						resultMatrix[i, j] += triangleMatrix[i, k] * affinMaxtix[k, j];
 					}
 				}
 			}
