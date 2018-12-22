@@ -175,6 +175,7 @@
 			this.nupDegree.Name = "nupDegree";
 			this.nupDegree.Size = new System.Drawing.Size(70, 20);
 			this.nupDegree.TabIndex = 26;
+			this.nupDegree.ValueChanged += new System.EventHandler(this.nupDegree_ValueChanged);
 			// 
 			// label3
 			// 
