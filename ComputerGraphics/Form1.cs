@@ -17,7 +17,7 @@ namespace ComputerGraphics
 	{
 		private const int NumOfCells = 100;
 		private const int CellSize = 20;
-		private const int CellSpace = 40;
+		private const int CellSpace = 20;
 		private const int Offset = 5;
 		private const int UpUpSpaceFromCoordinateLine = 25;
 		private const int BottomSpaceFromCoordinateLine = 10;
@@ -182,6 +182,7 @@ namespace ComputerGraphics
 			var matrix = MoveToCenter(defaultTriangle);
 			matrix = Rotate(matrix);
 			matrix = MoveToDefaultPosition(matrix);
+			matrix = Scale(matrix);
 			currentTriangle = matrix;
 			DrawCurrentTriangle(matrix);
 			
@@ -261,6 +262,7 @@ namespace ComputerGraphics
 		private void btnClear_Click(object sender, EventArgs e)
 		{
 			Initialize();
+			DrawDefaultTriangle();
 		}
 
 		private double[,] AffinaMult(double[,] triangleMatrix, double[,] affinMaxtix)
@@ -284,30 +286,22 @@ namespace ComputerGraphics
 		private double GetAverageXOfTriangle(double[,] triangle)
 		{
 			double sum = triangle[0, 0] + triangle[1, 0] + triangle[2, 0];
-
 			return sum / 3.0;
 		}
 
 		private double GetAverageYOfTriangle(double[,] triangle)
 		{
 			double sum = triangle[0, 1] + triangle[1, 1] + triangle[2, 1];
-
 			return sum / 3.0;
 		}
 
 		private void nupDegree_ValueChanged(object sender, EventArgs e)
 		{
-			//double angle = Convert.ToDouble(nupDegree.Value) * Math.PI / 180;
-
-			//double[,] rotate = {
-			//	{   Math.Cos(angle), Math.Sin(angle), 0 },
-			//	{  -Math.Sin(angle), Math.Cos(angle), 0 },
-			//	{   0,               0,               1 }
-			//};
-
-			//double[,] result = AffinaMult(currentTriangle, rotate);
-
-			//DrawCurrentTriangle(result);
+			var matrix = MoveToCenter(defaultTriangle);
+			matrix = Rotate(matrix);
+			matrix = MoveToDefaultPosition(matrix);
+			currentTriangle = matrix;
+			DrawCurrentTriangle(matrix);
 		}
 
 		private double[,] MoveToCenter(double[,] matrix)
@@ -327,9 +321,6 @@ namespace ComputerGraphics
 
 		private double[,] MoveToDefaultPosition(double[,] matrix)
 		{
-			double averageX = GetAverageXOfTriangle(matrix);
-			double averageY = GetAverageYOfTriangle(matrix);
-
 			double[,] translate =
 			{
 				{ 1, 0, 0 },
@@ -351,6 +342,21 @@ namespace ComputerGraphics
 			};
 
 			return AffinaMult(matrix, rotate);
+		}
+
+		private double[,] Scale(double[,] matrix)
+		{
+			int x = Convert.ToInt32(nupX.Value);
+			int y = Convert.ToInt32(nupY.Value);
+
+			double[,] scale = {
+				{ x, 0, 0 },
+				{ 0, y, 0 },
+				{ 0, 0,  1 }
+			};
+
+			return AffinaMult(matrix, scale);
+
 		}
 
 		private void DrawCurrentTriangle(double[,] triangle)
@@ -375,11 +381,6 @@ namespace ComputerGraphics
 			pictureBoxGrid.BackgroundImage = image;
 
 			pictureBoxGrid.Invalidate();
-		}
-
-		private void button1_Click(object sender, EventArgs e)
-		{
-		
 		}
 	}
 }
