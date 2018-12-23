@@ -28,7 +28,7 @@ namespace ComputerGraphics
 		private Bitmap image;
 		private Pen pen;
 
-		private double[,] defaultTriangle = new double[3, 3] { {3, 5, 1}, {4, 1, 1}, {1, 0, 1} };
+		private double[,] defaultTriangle = new double[3, 3] { {1, 4, 1}, {1, 1, 1}, {4, 1, 1} };
 		private double[,] currentTriangle;
 
 		private double defaultAverageX = 0;
@@ -179,79 +179,22 @@ namespace ComputerGraphics
 
 		private void DrawTriangle()
 		{
-			var matrix = MoveToCenter(defaultTriangle);
+			int x = Convert.ToInt32(nupX.Value);
+			int y = Convert.ToInt32(nupY.Value);
+
+			if (x == 0 || y == 0)
+			{
+				MessageBox.Show("Неможливо збільшити трикутник в нуль раз!", "Невірно задані дані", MessageBoxButtons.OK, MessageBoxIcon.Information);
+
+				return;
+			}
+
+			double[,] matrix = MoveToCenter(defaultTriangle);
 			matrix = Rotate(matrix);
 			matrix = MoveToDefaultPosition(matrix);
 			matrix = Scale(matrix);
 			currentTriangle = matrix;
 			DrawCurrentTriangle(matrix);
-			
-			//Thread.Sleep(500);
-			//Rotate();
-			//	MoveToDefaultPosition();
-
-			//int x = Convert.ToInt32(nupX.Value);
-			//int y = Convert.ToInt32(nupY.Value);
-
-			//double[,] scale = {
-			//	{ x, 0, 0 },
-			//	{ 0, y, 0 },
-			//	{ 0, 0,  1 }
-			//};
-
-			//Matrix matrix = new Matrix(1, 1, 1, 1, 1, 1);
-
-			//double averageX = GetAverageXOfTriangle(defaultTriangle);
-			//double averageY = GetAverageYOfTriangle(defaultTriangle);
-
-			//double[,] translate =
-			//{
-			//	{ 1, 0, 0 },
-			//	{ 0, 1, 0 },
-			//	{ -averageX, -averageY, 1 }
-			//};
-
-			//double angle = Convert.ToDouble(nupDegree.Value) * Math.PI / 180;
-
-			//double[,] rotate = {
-			//	{   Math.Cos(angle),  Math.Sin(angle), 0 },
-			//	{  -Math.Sin(angle),  Math.Cos(angle), 0 },
-			//	{   0,                0,               1 }
-			//};
-
-			//currentTriangle = AffinaMult(defaultTriangle, translate);
-
-			//DrawCurrentTriangle(currentTriangle);
-
-			//if((firstX < 0  || firstX > 800  ||
-			//    secondX < 0 || secondX > 800 ||
-			//    thirdX < 0  || thirdX > 800) ||
-			//   (firstY < 0  || firstY > 800  ||
-			//    secondY < 0 || secondY > 800 ||
-			//    thirdY < 0  || thirdY > 800))
-			//{
-			//	MessageBox.Show("Трикутник виходить за межі координат!", "Невірні координати", MessageBoxButtons.OK, MessageBoxIcon.Information);
-
-			//	return;
-			//}
-
-			//if ((x == 0 && y == 0) || (x == 1 && y == 1))
-			//{
-			//	MessageBox.Show("Неможливо побудувати трикутник. Х та У не можуть = 0 або 1!", "Невірні координати", MessageBoxButtons.OK, MessageBoxIcon.Information);
-
-			//	return;
-			//}
-
-
-			//image = new Bitmap(pictureBoxGrid.Width, pictureBoxGrid.Height, PixelFormat.Format32bppRgb);
-			//pen = new Pen(Color.Gray, 1);
-
-			//Graphics.FromImage(image).Clear(Color.White);
-			//pictureBoxGrid.BackgroundImage = image;
-
-			//DrawGrid();
-			//DrawCoordinateSystem();
-			//DrawLabels();
 		}
 
 		private void btnAddSquare_Click(object sender, EventArgs e)
@@ -297,11 +240,12 @@ namespace ComputerGraphics
 
 		private void nupDegree_ValueChanged(object sender, EventArgs e)
 		{
-			var matrix = MoveToCenter(defaultTriangle);
-			matrix = Rotate(matrix);
-			matrix = MoveToDefaultPosition(matrix);
-			currentTriangle = matrix;
-			DrawCurrentTriangle(matrix);
+			//double[,] matrix = MoveToCenter(currentTriangle);
+			//matrix = Rotate(matrix);
+			//matrix = MoveToDefaultPosition(matrix);
+			////matrix = Scale(matrix);
+			//currentTriangle = matrix;
+			//DrawCurrentTriangle(matrix);
 		}
 
 		private double[,] MoveToCenter(double[,] matrix)
@@ -369,6 +313,18 @@ namespace ComputerGraphics
 
 			float thirdX = GetByCoordinateX(triangle[2, 0]);
 			float thirdY = GetByCoordinateY(triangle[2, 1]);
+
+			if ((firstX < 0 || firstX > 800 ||
+			     secondX < 0 || secondX > 800 ||
+			     thirdX < 0 || thirdX > 800) ||
+			    (firstY < 0 || firstY > 800 ||
+			     secondY < 0 || secondY > 800 ||
+			     thirdY < 0 || thirdY > 800))
+			{
+				MessageBox.Show("Трикутник виходить за межі координат!", "Невірні координати", MessageBoxButtons.OK, MessageBoxIcon.Information);
+
+				return;
+			}
 
 			PointF[] points = new PointF[3];
 			points[0] = new PointF(firstX, firstY);

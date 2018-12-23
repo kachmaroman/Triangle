@@ -90,12 +90,12 @@
 			this.nupX.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
 			this.nupX.Location = new System.Drawing.Point(861, 36);
 			this.nupX.Maximum = new decimal(new int[] {
-            10,
+            5,
             0,
             0,
             0});
 			this.nupX.Minimum = new decimal(new int[] {
-            10,
+            5,
             0,
             0,
             -2147483648});
@@ -103,18 +103,23 @@
 			this.nupX.ReadOnly = true;
 			this.nupX.Size = new System.Drawing.Size(70, 20);
 			this.nupX.TabIndex = 15;
+			this.nupX.Value = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
 			// 
 			// nupY
 			// 
 			this.nupY.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
 			this.nupY.Location = new System.Drawing.Point(861, 66);
 			this.nupY.Maximum = new decimal(new int[] {
-            6,
+            5,
             0,
             0,
             0});
 			this.nupY.Minimum = new decimal(new int[] {
-            6,
+            5,
             0,
             0,
             -2147483648});
@@ -122,6 +127,11 @@
 			this.nupY.ReadOnly = true;
 			this.nupY.Size = new System.Drawing.Size(70, 20);
 			this.nupY.TabIndex = 14;
+			this.nupY.Value = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
 			// 
 			// btnAddSquare
 			// 
@@ -130,7 +140,7 @@
 			this.btnAddSquare.Name = "btnAddSquare";
 			this.btnAddSquare.Size = new System.Drawing.Size(175, 50);
 			this.btnAddSquare.TabIndex = 16;
-			this.btnAddSquare.Text = "Побудувати трикутник";
+			this.btnAddSquare.Text = "Побудувати";
 			this.btnAddSquare.UseVisualStyleBackColor = true;
 			this.btnAddSquare.Click += new System.EventHandler(this.btnAddSquare_Click);
 			// 
