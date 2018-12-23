@@ -31,6 +31,9 @@ namespace ComputerGraphics
 		private double[,] defaultTriangle = new double[3, 3] { {3, 5, 1}, {4, 1, 1}, {1, 0, 1} };
 		private double[,] currentTriangle;
 
+		private double defaultAverageX = 0;
+		private double defaultAverageY = 0;
+
 		public Form1()
 		{
 			InitializeComponent();
@@ -40,6 +43,9 @@ namespace ComputerGraphics
 			currentTriangle = defaultTriangle;
 
 			DrawDefaultTriangle();
+
+			defaultAverageX = GetAverageXOfTriangle(currentTriangle);
+			defaultAverageY = GetAverageYOfTriangle(currentTriangle);
 		}
 
 		private void Initialize()
@@ -173,10 +179,15 @@ namespace ComputerGraphics
 
 		private void DrawTriangle()
 		{
-			MoveToCenter();
+			var matrix = MoveToCenter(defaultTriangle);
+			matrix = Rotate(matrix);
+			matrix = MoveToDefaultPosition(matrix);
+			currentTriangle = matrix;
+			DrawCurrentTriangle(matrix);
+			
 			//Thread.Sleep(500);
 			//Rotate();
-		//	MoveToDefaultPosition();
+			//	MoveToDefaultPosition();
 
 			//int x = Convert.ToInt32(nupX.Value);
 			//int y = Convert.ToInt32(nupY.Value);
@@ -286,23 +297,23 @@ namespace ComputerGraphics
 
 		private void nupDegree_ValueChanged(object sender, EventArgs e)
 		{
-			double angle = Convert.ToDouble(nupDegree.Value) * Math.PI / 180;
+			//double angle = Convert.ToDouble(nupDegree.Value) * Math.PI / 180;
 
-			double[,] rotate = {
-				{   Math.Cos(angle), Math.Sin(angle), 0 },
-				{  -Math.Sin(angle), Math.Cos(angle), 0 },
-				{   0,               0,               1 }
-			};
+			//double[,] rotate = {
+			//	{   Math.Cos(angle), Math.Sin(angle), 0 },
+			//	{  -Math.Sin(angle), Math.Cos(angle), 0 },
+			//	{   0,               0,               1 }
+			//};
 
-			double[,] result = AffinaMult(currentTriangle, rotate);
+			//double[,] result = AffinaMult(currentTriangle, rotate);
 
-			DrawCurrentTriangle(result);
+			//DrawCurrentTriangle(result);
 		}
 
-		private void MoveToCenter()
+		private double[,] MoveToCenter(double[,] matrix)
 		{
-			double averageX = GetAverageXOfTriangle(currentTriangle);
-			double averageY = GetAverageYOfTriangle(currentTriangle);
+			double averageX = GetAverageXOfTriangle(matrix);
+			double averageY = GetAverageYOfTriangle(matrix);
 
 			double[,] translate =
 			{
@@ -311,40 +322,35 @@ namespace ComputerGraphics
 				{ -averageX, -averageY, 1 }
 			};
 
-			currentTriangle = AffinaMult(currentTriangle, translate);
-
-			DrawCurrentTriangle(currentTriangle);
+			return AffinaMult(matrix, translate);
 		}
 
-		private void MoveToDefaultPosition()
+		private double[,] MoveToDefaultPosition(double[,] matrix)
 		{
-			double averageX = GetAverageXOfTriangle(currentTriangle);
-			double averageY = GetAverageYOfTriangle(currentTriangle);
+			double averageX = GetAverageXOfTriangle(matrix);
+			double averageY = GetAverageYOfTriangle(matrix);
 
 			double[,] translate =
 			{
 				{ 1, 0, 0 },
 				{ 0, 1, 0 },
-				{ -averageX, -averageY, 1 }
+				{ defaultAverageX, defaultAverageY, 1 }
 			};
 
-			currentTriangle = AffinaMult(currentTriangle, translate);
-
-			DrawCurrentTriangle(currentTriangle);
+			return AffinaMult(matrix, translate);
 		}
 
-		private void Rotate()
+		private double[,] Rotate(double[,] matrix)
 		{
 			double angle = Convert.ToDouble(nupDegree.Value) * Math.PI / 180;
 
 			double[,] rotate = {
-				{   Math.Cos(angle),  Math.Sin(angle), 0 },
-				{  -Math.Sin(angle),  Math.Cos(angle), 0 },
+				{   Math.Cos(angle), -Math.Sin(angle), 0 },
+				{   Math.Sin(angle),  Math.Cos(angle), 0 },
 				{   0,                0,               1 }
 			};
 
-			double[,] result = AffinaMult(currentTriangle, rotate);
-			DrawCurrentTriangle(result);
+			return AffinaMult(matrix, rotate);
 		}
 
 		private void DrawCurrentTriangle(double[,] triangle)
@@ -373,7 +379,7 @@ namespace ComputerGraphics
 
 		private void button1_Click(object sender, EventArgs e)
 		{
-			MoveToDefaultPosition();
+		
 		}
 	}
 }
