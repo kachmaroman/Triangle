@@ -7,6 +7,7 @@ using System.Drawing.Drawing2D;
 using System.Drawing.Imaging;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
@@ -27,14 +28,16 @@ namespace ComputerGraphics
 		private Bitmap image;
 		private Pen pen;
 
-		private double[,] triangleMatrix = new double[3, 3] { {3, -1, 1}, {4, 1, 1}, {2, 1, 1} };
-
+		private double[,] defaultTriangle = new double[3, 3] { {3, 5, 1}, {4, 1, 1}, {1, 0, 1} };
+		private double[,] currentTriangle;
 
 		public Form1()
 		{
 			InitializeComponent();
 
 			Initialize();
+
+			currentTriangle = defaultTriangle;
 
 			DrawDefaultTriangle();
 		}
@@ -53,22 +56,20 @@ namespace ComputerGraphics
 			DrawCoordinateSystem();
 			DrawLabels();
 			
-
 			pictureBoxGrid.Invalidate();
 		}
 
-
 		private void DrawDefaultTriangle()
 		{
-			float firstX = GetByCoordinateX(triangleMatrix[0, 0]);
-			float firstY = GetByCoordinateY(triangleMatrix[0, 1]);
+			float firstX = GetByCoordinateX(defaultTriangle[0, 0]);
+			float firstY = GetByCoordinateY(defaultTriangle[0, 1]);
 
 
-			float secondX = GetByCoordinateX(triangleMatrix[1, 0]);
-			float secondY = GetByCoordinateY(triangleMatrix[1, 1]);
+			float secondX = GetByCoordinateX(defaultTriangle[1, 0]);
+			float secondY = GetByCoordinateY(defaultTriangle[1, 1]);
 
-			float thirdX = GetByCoordinateX(triangleMatrix[2, 0]);
-			float thirdY = GetByCoordinateY(triangleMatrix[2, 1]);
+			float thirdX = GetByCoordinateX(defaultTriangle[2, 0]);
+			float thirdY = GetByCoordinateY(defaultTriangle[2, 1]);
 
 			pen.Color = Color.Black;
 			pen.Width = 3;
@@ -172,48 +173,43 @@ namespace ComputerGraphics
 
 		private void DrawTriangle()
 		{
-			int x = Convert.ToInt32(nupX.Value);
-			int y = Convert.ToInt32(nupY.Value);
+			MoveToCenter();
+			//Thread.Sleep(500);
+			//Rotate();
+		//	MoveToDefaultPosition();
 
+			//int x = Convert.ToInt32(nupX.Value);
+			//int y = Convert.ToInt32(nupY.Value);
 
+			//double[,] scale = {
+			//	{ x, 0, 0 },
+			//	{ 0, y, 0 },
+			//	{ 0, 0,  1 }
+			//};
 
-			double[,] scale = {
-				{ x, 0, 0 },
-				{ 0, y, 0 },
-				{ 0, 0,  1 }
-			};
+			//Matrix matrix = new Matrix(1, 1, 1, 1, 1, 1);
 
-			Matrix matrix = new Matrix(1, 1, 1, 1, 1, 11);
+			//double averageX = GetAverageXOfTriangle(defaultTriangle);
+			//double averageY = GetAverageYOfTriangle(defaultTriangle);
 
-			double averageX = GetAverageXOfTriangle(triangleMatrix);
-			double averageY = GetAverageYOfTriangle(triangleMatrix);
+			//double[,] translate =
+			//{
+			//	{ 1, 0, 0 },
+			//	{ 0, 1, 0 },
+			//	{ -averageX, -averageY, 1 }
+			//};
 
-			double[,] translate =
-			{
-				{ 1, 0, 0 },
-				{ 0, 1, 0 },
-				{ -averageX, -averageY, 1 }
-			};
+			//double angle = Convert.ToDouble(nupDegree.Value) * Math.PI / 180;
 
-			double angle = Convert.ToDouble(nupDegree.Value) * Math.PI / 180;
+			//double[,] rotate = {
+			//	{   Math.Cos(angle),  Math.Sin(angle), 0 },
+			//	{  -Math.Sin(angle),  Math.Cos(angle), 0 },
+			//	{   0,                0,               1 }
+			//};
 
-			double[,] rotate = {
-				{  Math.Cos(angle),  Math.Sin(angle), 0 },
-				{  -Math.Sin(angle), Math.Cos(angle), 0 },
-				{  0,               0,               1 }
-			};
+			//currentTriangle = AffinaMult(defaultTriangle, translate);
 
-			double[,] resultMatrix = AffinaMult(triangleMatrix, translate);
-			//resultMatrix = AffinaMult(resultMatrix, rotate);
-
-			float firstX = GetByCoordinateX(resultMatrix[0, 0]);
-			float firstY = GetByCoordinateY(resultMatrix[0, 1]);
-
-			float secondX = GetByCoordinateX(resultMatrix[1, 0]);
-			float secondY = GetByCoordinateY(resultMatrix[1, 1]);
-
-			float thirdX = GetByCoordinateX(resultMatrix[2, 0]);
-			float thirdY = GetByCoordinateY(resultMatrix[2, 1]);
+			//DrawCurrentTriangle(currentTriangle);
 
 			//if((firstX < 0  || firstX > 800  ||
 			//    secondX < 0 || secondX > 800 ||
@@ -244,18 +240,6 @@ namespace ComputerGraphics
 			//DrawGrid();
 			//DrawCoordinateSystem();
 			//DrawLabels();
-
-			//pictureBoxGrid.Invalidate();
-
-			PointF[] points = new PointF[3];
-			points[0] = new PointF(firstX, firstY);
-			points[1] = new PointF(secondX, secondY);
-			points[2] = new PointF(thirdX, thirdY);
-
-			Graphics.FromImage(image).DrawPolygon(pen, points);
-			pictureBoxGrid.BackgroundImage = image;
-
-			pictureBoxGrid.Invalidate();
 		}
 
 		private void btnAddSquare_Click(object sender, EventArgs e)
@@ -286,24 +270,6 @@ namespace ComputerGraphics
 			return resultMatrix;
 		}
 
-		private double[,] MatrixMult(double[,] triangleMatrix, double[,] affinMaxtix)
-		{
-			double[,] resultMatrix = new double[3, 3];
-
-			for (int i = 0; i <= triangleMatrix.Rank; i++)
-			{
-				for (int j = 0; j <= triangleMatrix.Rank; j++)
-				{
-					for (int k = 0; k <= triangleMatrix.Rank; k++)
-					{
-						resultMatrix[i, j] += triangleMatrix[i, j] * affinMaxtix[k, j];
-					}
-				}
-			}
-
-			return resultMatrix;
-		}
-
 		private double GetAverageXOfTriangle(double[,] triangle)
 		{
 			double sum = triangle[0, 0] + triangle[1, 0] + triangle[2, 0];
@@ -323,21 +289,74 @@ namespace ComputerGraphics
 			double angle = Convert.ToDouble(nupDegree.Value) * Math.PI / 180;
 
 			double[,] rotate = {
-				{  Math.Cos(angle),  Math.Sin(angle), 0 },
+				{   Math.Cos(angle), Math.Sin(angle), 0 },
 				{  -Math.Sin(angle), Math.Cos(angle), 0 },
-				{  0,               0,               1 }
+				{   0,               0,               1 }
 			};
 
-			double[,] resultMatrix = AffinaMult(triangleMatrix, rotate);
+			double[,] result = AffinaMult(currentTriangle, rotate);
 
-			float firstX = GetByCoordinateX(resultMatrix[0, 0]);
-			float firstY = GetByCoordinateY(resultMatrix[0, 1]);
+			DrawCurrentTriangle(result);
+		}
 
-			float secondX = GetByCoordinateX(resultMatrix[1, 0]);
-			float secondY = GetByCoordinateY(resultMatrix[1, 1]);
+		private void MoveToCenter()
+		{
+			double averageX = GetAverageXOfTriangle(currentTriangle);
+			double averageY = GetAverageYOfTriangle(currentTriangle);
 
-			float thirdX = GetByCoordinateX(resultMatrix[2, 0]);
-			float thirdY = GetByCoordinateY(resultMatrix[2, 1]);
+			double[,] translate =
+			{
+				{ 1, 0, 0 },
+				{ 0, 1, 0 },
+				{ -averageX, -averageY, 1 }
+			};
+
+			currentTriangle = AffinaMult(currentTriangle, translate);
+
+			DrawCurrentTriangle(currentTriangle);
+		}
+
+		private void MoveToDefaultPosition()
+		{
+			double averageX = GetAverageXOfTriangle(currentTriangle);
+			double averageY = GetAverageYOfTriangle(currentTriangle);
+
+			double[,] translate =
+			{
+				{ 1, 0, 0 },
+				{ 0, 1, 0 },
+				{ -averageX, -averageY, 1 }
+			};
+
+			currentTriangle = AffinaMult(currentTriangle, translate);
+
+			DrawCurrentTriangle(currentTriangle);
+		}
+
+		private void Rotate()
+		{
+			double angle = Convert.ToDouble(nupDegree.Value) * Math.PI / 180;
+
+			double[,] rotate = {
+				{   Math.Cos(angle),  Math.Sin(angle), 0 },
+				{  -Math.Sin(angle),  Math.Cos(angle), 0 },
+				{   0,                0,               1 }
+			};
+
+			double[,] result = AffinaMult(currentTriangle, rotate);
+			DrawCurrentTriangle(result);
+		}
+
+		private void DrawCurrentTriangle(double[,] triangle)
+		{
+			float firstX = GetByCoordinateX(triangle[0, 0]);
+			float firstY = GetByCoordinateY(triangle[0, 1]);
+
+			float secondX = GetByCoordinateX(triangle[1, 0]);
+			float secondY = GetByCoordinateY(triangle[1, 1]);
+
+			float thirdX = GetByCoordinateX(triangle[2, 0]);
+			float thirdY = GetByCoordinateY(triangle[2, 1]);
 
 			PointF[] points = new PointF[3];
 			points[0] = new PointF(firstX, firstY);
@@ -350,6 +369,11 @@ namespace ComputerGraphics
 			pictureBoxGrid.BackgroundImage = image;
 
 			pictureBoxGrid.Invalidate();
+		}
+
+		private void button1_Click(object sender, EventArgs e)
+		{
+			MoveToDefaultPosition();
 		}
 	}
 }
